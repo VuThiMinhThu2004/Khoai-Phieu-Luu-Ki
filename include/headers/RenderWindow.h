@@ -1,5 +1,10 @@
 #pragma once
+
 #include <iostream>
+#include <string>
+#include <vector>
+#include <math.h>
+#include <stdlib.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -7,40 +12,63 @@
 #include <sstream>
 
 #include "Entity.h"
+#include "Tile.h"
+#include "Player.h"
+#include "Bullet.h"
+#include "Timer.h"
+
 using namespace std;
 
-const float GRAVITY = 0.25;
+class Tile;
+const float GRAVITY = 0.3;//lực hấp dẫn
+const float MAX_GRAVITY = 15;//hạn chế tối đa của nó
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+//screen
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 720;
 
-const int LEVEL_WIDTH = 1920;
-const int LEVEL_HEIGHT = 1200;
+//level
+const int LEVEL_WIDTH = 1344;
+const int LEVEL_HEIGHT = 1024;
 
-class RenderWindow {
-private:
-	TTF_Font* font = NULL;
-	SDL_Window* window = NULL;
-	SDL_Renderer* renderer = NULL;
-	SDL_Surface* surface = NULL;
+//tile
+const int TILE_WIDTH = 80;
+const int TILE_HEIGHT = 80;
 
-public:
+
+//các hằng số liên quan đến số lượng các phần, bản đồ và sprite trong mức chơi.
+const int TOTAL_TILES = 336;
+const int TOTAL_TILE_SPRITES = 187;
+
+//các con trỏ tĩnh đến font, cửa sổ, trình kết xuất và bề mặt của SDL.
+static TTF_Font* font = NULL;
+static SDL_Window* window = NULL;
+static SDL_Renderer* renderer = NULL;
+static SDL_Surface* surface = NULL;
+
+namespace commonFunc {
 	//Window
-	RenderWindow(const char* p_title, int p_width, int p_height);
-
-	//Texture
+	void renderWindow(const char* p_title, int p_width, int p_height);
+	
+	//Texture: lazyfoo
 	SDL_Texture* loadTexture(const char* p_filePath);
-	void renderTexture(Entity& entity, SDL_Rect* rec = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
-	void renderAnimation(SDL_Texture* p_tex, int p_w, int p_h, float p_x, float p_y);
-	void renderPlayer(Entity& player, float p_CamX, float p_CamY);
+	void renderTexture(Entity& entity, SDL_Rect *rec = NULL, SDL_Rect *camera = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void renderTexture(SDL_Texture* p_tex, float p_x, float p_y, float p_w = 0, float p_h = 0, SDL_Rect* rec = NULL, SDL_Rect* camera = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void renderTile(Entity& entity, SDL_Rect& rec, SDL_Rect& camera);
+	void renderPlayer(Entity& entity, SDL_Rect& camera);
+	void renderAnimation(SDL_Texture* p_tex, float p_x, float p_y, SDL_Rect& p_clip, SDL_Rect& p_camera, double p_angle = 0.0, SDL_Point* p_center = NULL, SDL_RendererFlip p_flip = SDL_FLIP_NONE);
+
+	//lesson 27: Collision boxes are a standard way to check collision between two objects
+	//ls28: per-pixer-collision-detection
+	bool checkCollision(SDL_Rect a, SDL_Rect b);
 
 	//Font
-	void loadFont(const char* filePath);
+	bool loadFont(const char* filePath);
 	SDL_Texture* createText(string p_text, SDL_Color p_textColor);
-
+	
 	void Color();
 	void clearRenderer();
 	void renderPresent();
 	void cleanUp();
+}
 	
-};

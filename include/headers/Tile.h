@@ -1,12 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <stdlib.h>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
-
 #include "RenderWindow.h"
 #include "Entity.h"
 using namespace std;
@@ -23,3 +16,4 @@ public:
 	void setType(int p_type) { tileType = p_type; }//kiểu gt mới cho ô gạch
 	SDL_Rect getCollision();//trả về vùng va chạm của ô gạch
 };
+
