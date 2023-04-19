@@ -1,5 +1,56 @@
 ﻿#include "Player.h"
 
+Player::Player(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
+	
+	//khởi tạo tọa độ, texture và collision của Player, cũng như các frame cho animation.
+	
+	collision.x = getX() + PLAYER_WIDTH;
+	collision.y = getY() + PLAYER_HEIGHT;
+	collision.w = PLAYER_WIDTH-12; //cho vừa với chân nhân vật
+	collision.h = PLAYER_HEIGHT;
+
+
+	for (int i = 0; i < WALKING_ANIMATION_FRAMES; i++) {
+		walkingClips[i].x = i * (getFrame().w/4);
+		if (i >= 4) {
+			walkingClips[i].x = (i-4) * (getFrame().w/4);
+			walkingClips[i].y = (getFrame().h/6)*2;
+		}
+		else walkingClips[i].y = getFrame().h/6;
+		walkingClips[i].w = getFrame().w/4;
+		walkingClips[i].h = getFrame().h/6;
+	}
+
+	for (int i = 0; i < IDLING_ANIMATION_FRAMES; i++) {
+		idlingClips[i].x = i * (getFrame().w/4);
+		idlingClips[i].y = 0;
+		idlingClips[i].w = getFrame().w/4;
+		idlingClips[i].h = getFrame().h/6;
+	}
+
+	for (int i = 0; i < JUMPING_ANIMATION_FRAMES; i++) {
+		jumpingClips[i].x = i * (getFrame().w / 4);
+		jumpingClips[i].y = (getFrame().h/6) * 3;
+		jumpingClips[i].w = getFrame().w / 4;
+		jumpingClips[i].h = getFrame().h / 6;
+	}
+
+	for (int i = 0; i < FALLING_ANIMATION_FRAMES; i++) {
+		fallingClips[i].x = i * (getFrame().w / 4);
+		fallingClips[i].y = (getFrame().h / 6) * 4;
+		fallingClips[i].w = getFrame().w / 4;
+		fallingClips[i].h = getFrame().h / 6;
+	}
+	
+	for (int i = 0; i < DEATH_ANIMATION_FRAMES; i++) {
+		deathClips[i].x = i * (getFrame().w / 4);
+		deathClips[i].y = (getFrame().h / 6) * 5;
+		deathClips[i].w = getFrame().w / 4;
+		deathClips[i].h = getFrame().h / 6;
+	}
+}
+
+//lazyfoo
 void Player::handleInputActive(SDL_Event &events) {
 	if (events.type == SDL_KEYDOWN && events.key.repeat == 0) {
 		switch (events.key.keysym.sym) {

@@ -18,7 +18,7 @@ private:
 	int bulletType;
 	SDL_Rect collision;
 	
-	static const int BULLET_ANIMATION_FRAMES = 4;
+	static const int BULLET_ANIMATION_FRAMES = 6;
 	SDL_Rect bulletClips[BULLET_ANIMATION_FRAMES];
 	int bulletCounter = 0;
 	
@@ -28,7 +28,7 @@ public:
 		NORMAL = 1,
 	};
 	Bullet(float p_x, float p_y, SDL_Texture* p_tex);
-	void handelInput(SDL_Event &events);
+	void handelInputActive(SDL_Event &events);
 	void move();
 	void render(SDL_Rect& camera, SDL_Texture* p_tex);
 

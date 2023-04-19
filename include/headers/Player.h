@@ -29,11 +29,27 @@ private:
 	SDL_Rect idlingClips[IDLING_ANIMATION_FRAMES];	
 	SDL_Rect deathClips[DEATH_ANIMATION_FRAMES];
 
+	int idleFrame = 0;
+	int walkFrame = 0;
+	int jumpFrame = 0;
+	int fallingFrame = 0;
+
+
+	//lưu trữ trạng thái của Player: va chạm, đạn bắn ra, âm thanh và hiệu ứng hình ảnh.
+	bool grounded = false; //đứng trên mặt đất hay không.
+	bool running = false; 
+	bool idling = true; //đang đứng yên hay không.
+	bool jumping = false; 
+	bool falling = true; 
+
+
+	
 	bool grounded = true;
 	float xVel = 0, yVel = 0;//vận tốc theo trục x và y của Player
 	
+	vector<Bullet*> bulletList;
 	SDL_Rect collision;//lưu trữ kích thước và vị trí của Player để xử lý va chạm.
-//	float camVel = 1.5;
+	
 public:
 	Player(float p_x, float p_y, SDL_Texture* p_tex);//khởi tạo player với tọa đồ và hình ảnh tương ứng
 	
@@ -47,5 +63,5 @@ public:
 	void handleCamera(SDL_Rect& camera, float& camVel);//xử lí camera trong trò chơi: lesson 30
 
 	SDL_Rect getCollision() const { return collision; } // trả về hình chữ nhật va chạm của nhân vật người chơi.
-
+	void setBullet(vector<Bullet*> bulletList) { this->bulletList = bulletList; }
 };
