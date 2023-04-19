@@ -13,9 +13,6 @@
 
 #include "Entity.h"
 #include "Tile.h"
-#include "Player.h"
-#include "Bullet.h"
-#include "Timer.h"
 
 using namespace std;
 

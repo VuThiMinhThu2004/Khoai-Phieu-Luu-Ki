@@ -22,7 +22,6 @@ int countedFrames = 0;
 
 //Các biến SDL_Rect để lưu trữ các thông số của các đối tượng trên màn hình.
 
-SDL_Rect gTileClips[TOTAL_TILE_SPRITES];
 SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 float camVel = 1.5;
 SDL_Rect gTileClips[TOTAL_TILE_SPRITES];
@@ -37,19 +36,19 @@ bool setTiles(Tile* tiles[]);
 void gameloop();
 
 
-int main(int argc, char* argv[]) {
-    init();
+// int main(int argc, char* argv[]) {
+//     init();
     
-    if (!setTiles(tileSet)) {
-        printf("Failed to load tile set!\n");
-    }
+//     if (!setTiles(tileSet)) {
+//         printf("Failed to load tile set!\n");
+//     }
             
-    gameloop();
-    //Giải phóng bộ nhớ
-    //Giải phóng bộ nhớ
-    commonFunc::cleanUp();
-    return 0;
-}
+//     gameloop();
+//     //Giải phóng bộ nhớ
+//     //Giải phóng bộ nhớ
+//     commonFunc::cleanUp();
+//     return 0;
+// }
 
 bool init(){//lazyfoo
     //Initialization flag
@@ -196,7 +195,7 @@ int main(int argc, char* argv[]) {
     Entity Background(0, 0, BackgroundTex);
  
     fpsTimer.start();
-    SDL_Rect camera = { (float)0, (float)0, SCREEN_WIDTH, SCREEN_HEIGHT };
+    SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
     
     //Game loop
     bool gameRunning = true;

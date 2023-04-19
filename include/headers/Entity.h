@@ -1,12 +1,15 @@
 #pragma once
-#include <iostream>
+
+#include <stdlib.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #include <sstream>
+#include <fstream>
+#include <ctime>
+#include <cstdlib>
 
-#include "RenderWindow.h"
 using namespace std;
 
 class Entity {

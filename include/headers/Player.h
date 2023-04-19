@@ -1,6 +1,10 @@
 ﻿#pragma once
 
+#include <iostream>
+
+#include "Entity.h"
 #include "RenderWindow.h"
+#include "Bullet.h"
 
 using namespace std;
 
