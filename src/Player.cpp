@@ -1,5 +1,6 @@
 ﻿#include "Player.h"
 
+//lesson 14
 Player::Player(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
 	
 	//khởi tạo tọa độ, texture và collision của Player, cũng như các frame cho animation.
@@ -50,7 +51,7 @@ Player::Player(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_te
 	}
 }
 
-//lazyfoo
+//lazyfoo 26
 void Player::handleInputActive(SDL_Event &events) {
 	if (events.type == SDL_KEYDOWN && events.key.repeat == 0) {
 		switch (events.key.keysym.sym) {
@@ -151,3 +152,42 @@ camera sẽ dừng di chuyển trên trục x và chỉ di chuyển theo trục 
 		camera.y = LEVEL_HEIGHT - camera.h;
 	}
 }
+
+//lazyfoo_14: hiển thị hình ảnh của nhân vật trong game
+void Player::render(SDL_Rect &p_camera) {
+	if (running) {
+	//sử dụng các sprite từ mảng walkingClips để tạo hiệu ứng chạy. 
+		commonFunc::renderAnimation(tex, xPos, yPos, walkingClips[walkFrame / 4], p_camera, 0, NULL, getFlipType());//hiển thị hình ảnh của nhân vật tương ứng với trạng thái đó.
+		walkFrame++;////Go to next frame
+
+		////Cycle animation
+		//Mỗi frame của sprite sẽ được hiển thị trong 4 lần lặp của vòng lặp để tạo hiệu ứng chuyển động.
+		if (walkFrame / 4 >= WALKING_ANIMATION_FRAMES) walkFrame = 0; // đặt lại khung trở lại 0 để hình ảnh động bắt đầu lại.
+	}
+
+	if (idling) {
+		commonFunc::renderAnimation(tex, xPos, yPos, idlingClips[idleFrame/6], p_camera, 0, NULL, getFlipType());
+		idleFrame++;
+		//Mỗi frame của sprite sẽ được hiển thị trong 6 lần lặp của vòng lặp để tạo hiệu ứng chuyển động.
+		if (idleFrame / 6 >= IDLING_ANIMATION_FRAMES) idleFrame = 0;
+	}
+	else idleFrame = 0;
+	/*
+	người chơi không đứng yên, mà sau đó chuyển sang trạng thái khác (ví dụ: chạy hoặc nhảy), 
+	thì hoạt hình mới sẽ bắt đầu từ frame đầu tiên của trạng thái đó thay vì frame hiện tại của trạng thái đứng yên.
+	 Nếu không reset biến idleFrame về 0, các frame cũ của trạng thái đứng yên sẽ tiếp tục được hiển thị khi chuyển sang trạng thái khác.
+	*/
+
+	if (jumping) {
+		commonFunc::renderAnimation(tex, xPos, yPos, jumpingClips[jumpFrame / 5], p_camera, 0, NULL, getFlipType());
+		jumpFrame++;
+		if (jumpFrame / 5 >= JUMPING_ANIMATION_FRAMES) jumpFrame = 0;
+	}
+	else jumpFrame = 0;
+
+	if (falling) {
+		commonFunc::renderAnimation(tex, xPos, yPos, fallingClips[fallingFrame / 4], p_camera, 0, NULL, getFlipType());
+		fallingFrame++;
+		if (fallingFrame / 4 >= FALLING_ANIMATION_FRAMES) fallingFrame = 0;
+	}
+	else fallingFrame = 0;
