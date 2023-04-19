@@ -1,4 +1,5 @@
 #include "Bullet.h"
+#include "RenderWindow.h"
 
 //ạo một đối tượng đạn mới với vị trí ban đầu p_x, p_y và hình ảnh được sử dụng để vẽ đạn là p_tex
 Bullet::Bullet(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
@@ -16,8 +17,8 @@ Bullet::Bullet(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_te
 	}
 }
 
-void Bullet::update(Tile* tile[]) {
-	if (bulletCounter/delay < 3) {
+void Bullet::update(vector<LevelPart>& LevelPartList) {
+	if (bulletFrame/delay < 4) {
 		xVel += BULLETSPEED;
 		if (getFlipType() == SDL_FLIP_HORIZONTAL) xPos -= xVel;
 		else if (getFlipType() == SDL_FLIP_NONE) xPos += xVel;
@@ -26,25 +27,17 @@ void Bullet::update(Tile* tile[]) {
 			xPos = 0;
 			collision.x = getX();
 		}
-		if (getX() + DEFAULTBULLET_W > LEVEL_WIDTH) {
-			xPos = LEVEL_WIDTH - DEFAULTBULLET_W;
-			collision.x = getX();
-		}
-		if (commonFunc::touchesWood(collision, tile)) {
+		
+		if (commonFunc::touchesWood(collision, LevelPartList)) {
 			if (getFlipType() == SDL_FLIP_HORIZONTAL) xPos += xVel;
 			else if (getFlipType() == SDL_FLIP_NONE) xPos -= xVel;
 			collision.x = getX();
 		}
 	}
-	if (bulletCounter/delay == BULLET_ANIMATION_FRAMES) setMove(false);
+	if (bulletFrame/delay == BULLET_ANIMATION_FRAMES) setMove(false);
 }
 
-void Bullet::move() {
-	if (flipType == SDL_FLIP_NONE) xPos += BULLETSPEED;
-	else xPos -= BULLETSPEED;
-	
-	collision.x = xPos;
-}
+
 
 void Bullet::setFlipType(SDL_RendererFlip p_PlayerflipType) {
 	flipType = p_PlayerflipType;
@@ -63,6 +56,6 @@ void Bullet::setWidthHeight(const int& p_width, const int& p_height, const int& 
 }
 
 void Bullet::render(SDL_Rect &camera, SDL_Texture* p_tex) {
-	commonFunc::renderAnimation(p_tex, getX(), getY(), bulletClips[bulletCounter/5], camera, 0, NULL, getFlipType());
-	bulletCounter++;
+	commonFunc::renderAnimation(p_tex, getX(), getY(), bulletClips[bulletFrame/5], camera, 0, NULL, getFlipType());
+	bulletFrame++;
 }

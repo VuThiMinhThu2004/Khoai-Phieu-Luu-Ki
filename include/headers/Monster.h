@@ -25,11 +25,11 @@ private:
 	SDL_Rect attackingClips[FALLING_ANIMATION_FRAMES];
 	SDL_Rect beingHitClips[BEINGHIT_ANIMATION_FRAMES];
 
-	int idleCounter = 0;
-	int walkCounter = 0;
-	int fallingCounter = 0;
-	int attackingCounter = 0;
-	int beingHitCounter = 0;
+	int idleFrame = 0;
+	int walkFrame = 0;
+	int fallingFrame = 0;
+	int attackingFrame = 0;
+	int beingHitFrame = 0;
 
 	bool grounded = true;
 	bool walking = false;

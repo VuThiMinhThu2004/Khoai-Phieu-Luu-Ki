@@ -201,25 +201,117 @@ bool commonFunc::checkCollision(SDL_Rect a, SDL_Rect b) {
 	}
 	return true;
 }
-bool commonFunc::touchesWood(SDL_Rect box, Tile* tiles[]) {
-	for (int i = 0; i < TOTAL_TILES; ++i) {
-		if ((tiles[i]->getType() >= 0) && (tiles[i]->getType() <= 84)) {
-			if (checkCollision(box, tiles[i]->getCollision())) {
-				return true;
-			}
+
+//ls 28
+//kiểm tra xem hình chữ nhật box có chạm vào bức tường (thể hiện bởi các Tile) không.
+bool commonFunc::touchesWood(SDL_Rect& box, vector<LevelPart>& LevelPartList) {
+	for (int i = 0; i < LevelPartList.size(); i++) {
+		if (box.x > LevelPartList.at(i).getX() && box.x + box.w + 13 < LevelPartList.at(i).getX() + LEVEL_WIDTH && box.y >= 0 && box.y < LEVEL_HEIGHT - TILE_HEIGHT) {
+			int collumn_left = (box.x - LevelPartList.at(i).getX()) / TILE_WIDTH;
+			int collumn_rigth = collumn_left + 1;
+			int row_up = box.y / TILE_HEIGHT;
+			int row_down = row_up + 1;
+
+			int stt1 = row_up * 21 + collumn_rigth;
+			int stt2 = row_down * 21 + collumn_rigth;
+			int stt3 = row_up * 21 + collumn_left;
+			int stt4 = row_down * 21 + collumn_left;
+
+			if ((LevelPartList.at(i).getTilesList().at(stt1)->getType() >= 0) && (LevelPartList.at(i).getTilesList().at(stt1)->getType() <= 84))
+				if (checkCollision(box, LevelPartList.at(i).getTilesList().at(stt1)->getCollision())) return true;
+
+			if ((LevelPartList.at(i).getTilesList().at(stt2)->getType() >= 0) && (LevelPartList.at(i).getTilesList().at(stt2)->getType() <= 84))
+				if (checkCollision(box, LevelPartList.at(i).getTilesList().at(stt2)->getCollision())) return true;
+
+
+			if ((LevelPartList.at(i).getTilesList().at(stt3)->getType() >= 0) && (LevelPartList.at(i).getTilesList().at(stt3)->getType() <= 84))
+				if (checkCollision(box, LevelPartList.at(i).getTilesList().at(stt3)->getCollision())) return true;
+
+			if ((LevelPartList.at(i).getTilesList().at(stt4)->getType() >= 0) && (LevelPartList.at(i).getTilesList().at(stt4)->getType() <= 84))
+				if (checkCollision(box, LevelPartList.at(i).getTilesList().at(stt4)->getCollision())) return true;
 		}
 	}
 	return false;
 }
 
-bool commonFunc::touchesWood(SDL_Rect box, Tile* tiles[], int &stt) {
-	for (int i = 0; i < TOTAL_TILES; ++i) {
-		if ((tiles[i]->getType() >= 0) && (tiles[i]->getType() <= 84)) {
-			if (checkCollision(box, tiles[i]->getCollision())) {
-				stt = i;
-				return true;
+
+//kiểm tra hcn box có va chạm vào bức tường (thể hiện bởi các Tile) không.
+/*
+có hai phiên bản: phiên bản đầu tiên trả về kết quả kiểm tra va chạm dưới dạng bool,
+trong khi phiên bản thứ hai trả về cả trạng thái đất liền (grounded) của hộp box và vị trí của Tile đất liền đầu tiên (groundSTT) và Tile của màn chơi hiện tại (levelSTT).
+*/
+bool commonFunc::touchesWood(SDL_Rect& box, vector<LevelPart>& LevelPartList, bool& grounded, int& groundSTT, int& levelSTT) {
+	
+	/*
+	mỗi LevelPart, nó sẽ kiểm tra xem hộp box có chạm vào LevelPart không 
+	bằng cách so sánh tọa độ x và y của box với kích thước của LevelPart
+	Nếu box chạm vào LevelPart, hàm sẽ xác định các chỉ số cột và dòng của các Tile mà hộp box đang chạm vào.
+	nó sẽ kiểm tra va chạm bằng cách gọi hàm checkCollision để kiểm tra xem hộp box có va chạm với Tile tương ứng không.
+	*/
+	bool check = false;
+	for (int i = 0; i < LevelPartList.size(); i++) {
+		if (box.x + box.w + 12 >= LevelPartList.at(i).getX() && box.x <= LevelPartList.at(i).getX() + LEVEL_WIDTH && box.y >= 0 && box.y < LEVEL_HEIGHT - TILE_HEIGHT) {
+			int column_left = (box.x - LevelPartList.at(i).getX()) / TILE_WIDTH;
+			int column_right = column_left + 1;
+			int row_up = box.y / TILE_HEIGHT;
+			int row_down = row_up + 1;
+
+
+			//tính toán các giá trị đại diện cho các ô vuông trong một ma trận hình chữ nhật.
+			int stt1 = row_up * 21 + column_right;// 21 (số cột của ma trận)
+			int stt2 = row_down * 21 + column_right;
+			int stt3 = row_up * 21 + column_left;
+			int stt4 = row_down * 21 + column_left;
+			
+
+			/*
+			kiểm tra xem hộp box có đang đứng trên Tile đất không. 
+			Nếu hộp box không đứng trên Tile đất nào, trạng thái đất liền sẽ được thiết lập là false.
+			Nếu hộp box đang đứng trên Tile đất, hàm sẽ gán grounded bằng true.
+			hàm sẽ lưu vị trí của Tile đất đầu tiên mà hộp box đang đứng lên đó vào groundSTT, 
+			và lưu chỉ số Tile của màn chơi hiện tại vào levelSTT.
+			*/
+
+			/*
+			hàm touchesWall kiểm tra xem hộp box có chạm vào LevelPartList.at(i) hay không 
+			bằng cách so sánh tọa độ x của box với tọa độ x của LevelPartList.at(i) và so sánh tọa độ y của box với giới hạn của chiều cao màn chơi.
+			Nếu hộp box chạm vào LevelPartList.at(i), nó tính toán các chỉ số cột và dòng tương ứng của Tile mà hộp box đang chạm vào. 
+			Sau đó, nó kiểm tra va chạm bằng cách gọi hàm checkcollisionN
+			*/
+
+			//kiểm tra xem hộp có nằm trong khoảng của đối tượng i hay không bằng cách so sánh giá trị x và chiều rộng của hộp với giá trị x và chiều rộng của đối tượng i.
+			if (box.x <= LevelPartList.at(i).getX() && box.x + box.w + 12 >= LevelPartList.at(i).getX() || box.x <= LevelPartList.at(i).getX() + LEVEL_WIDTH && box.x + box.w + 12 >= LevelPartList.at(i).getX() + LEVEL_WIDTH) {
+				grounded = false;//Nếu không, grounded được gán bằng false, có nghĩa là hộp không được nằm trên mặt đất.
 			}
+			else {//có=>tiếp tục kiểm tra va chạm của hộp với các ô vuông của bản đồ
+				//Các ô vuông được xác định bằng cách tính toán chỉ số (stt1, stt2, stt3 và stt4) của nó trong danh sách các ô vuông trong đối tượng i.
+				//Chỉ số này được tính bằng cách nhân số hàng của ô vuông với 21 (độ rộng của mỗi hàng là 21 ô vuông) và cộng với số cột của ô vuông.
+
+
+//nếu ô vuông có kiểu (getType) nằm trong khoảng từ 0 đến 84 và hộp va chạm với ô vuông đó (bằng cách sử dụng hàm checkCollision), biến check sẽ được gán bằng true, có nghĩa là hộp nằm trên mặt đất.
+				if ((LevelPartList.at(i).getTilesList().at(stt1)->getType() >= 0) && (LevelPartList.at(i).getTilesList().at(stt1)->getType() <= 84))
+					if (checkCollision(box, LevelPartList.at(i).getTilesList().at(stt1)->getCollision())) check = true;
+
+				if ((LevelPartList.at(i).getTilesList().at(stt2)->getType() >= 0) && (LevelPartList.at(i).getTilesList().at(stt2)->getType() <= 84))
+					if (checkCollision(box, LevelPartList.at(i).getTilesList().at(stt2)->getCollision())) check = true;
+
+
+				if ((LevelPartList.at(i).getTilesList().at(stt3)->getType() >= 0) && (LevelPartList.at(i).getTilesList().at(stt3)->getType() <= 84))
+					if (checkCollision(box, LevelPartList.at(i).getTilesList().at(stt3)->getCollision())) check = true;
+
+				if ((LevelPartList.at(i).getTilesList().at(stt4)->getType() >= 0) && (LevelPartList.at(i).getTilesList().at(stt4)->getType() <= 84))
+					if (checkCollision(box, LevelPartList.at(i).getTilesList().at(stt4)->getCollision())) check = true;
+
+//Nếu ô vuông tại stt2 và stt4 có kiểu lớn hơn 84 thì grounded được gán bằng false, có nghĩa là hộp không nằm trên mặt đất
+//Nếu ô vuông tại stt4 có kiểu lớn hơn 84 và ô vuông tại stt2 có kiểu từ 0 đến 84 và hộp không nằm bên phải của ô vuông tại stt2, grounded được gán bằng false.
+				if ((LevelPartList.at(i).getTilesList().at(stt2)->getType() > 84) && (LevelPartList.at(i).getTilesList().at(stt4)->getType() > 84)) grounded = false;
+				if ((LevelPartList.at(i).getTilesList().at(stt4)->getType() > 84) && (LevelPartList.at(i).getTilesList().at(stt2)->getType() <= 84) && box.x + box.w <= LevelPartList.at(i).getTilesList().at(stt2)->getX()) grounded = false;
+			}
+				
+			groundSTT = stt4;
+			levelSTT = i;
 		}
 	}
-	return false;
+//đoạn code trên kiểm tra va chạm của hộp với bản đồ và xác định xem hộp có nằm trên mặt đất hay không.
+	return check;
 }

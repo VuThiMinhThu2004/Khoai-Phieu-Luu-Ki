@@ -2,7 +2,7 @@
 
 #include "RenderWindow.h"
 #include "Entity.h"
-
+#include "LevelPart.h"
 
 using namespace std;
 
@@ -10,7 +10,7 @@ using namespace std;
 const int DEFAULTBULLET_W = 64;
 const int DEFAULTBULLET_H = 64;
 
-const int BULLETSPEED = 5;
+const int BULLETSPEED = 3;
 
 class Bullet : public Entity {
 private:
@@ -21,7 +21,7 @@ private:
 	
 	static const int BULLET_ANIMATION_FRAMES = 6;
 	SDL_Rect bulletClips[BULLET_ANIMATION_FRAMES];
-	int bulletCounter = 0;
+	int bulletFrame = 0;
 	const int delay = 5;//tính thời gian trễ giữa các frame trong animation.
 
 public:
@@ -30,15 +30,14 @@ public:
 		NORMAL = 1,
 	};
 	Bullet(float p_x, float p_y, SDL_Texture* p_tex);
-	void handelInputActive(SDL_Event &events);
-	void move();
+
+	void update(vector<LevelPart>& LevelPartList);
 	void render(SDL_Rect& camera, SDL_Texture* p_tex);
 
 	//getter
 	int getType() const { return bulletType; }
 	bool isMoving() const { return moving; }
 	SDL_Rect getCollision() { return collision; }
-	void update(Tile* tile[]);
 
 	//setter: thay đổi các thuộc tính của đạn: loại, tình trạng di chuyeernm phần va chạm
 	void setFlipType(SDL_RendererFlip p_PlayerflipType);

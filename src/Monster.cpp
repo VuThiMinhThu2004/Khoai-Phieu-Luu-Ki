@@ -155,7 +155,7 @@ void Monster::autoMovement(Tile* tile[]) {
 }
 
 bool Monster::isAttacking() {
-	if (attackingCounter / 7 >= 2) return true;
+	if (attackingFrame / 7 >= 2) return true;
 	return false;
 }
 
@@ -171,15 +171,15 @@ void Monster::getHit(Player& p_player) {
 			}
 		}
 	}
-	if (beingHitCounter / 7 >= BEINGHIT_ANIMATION_FRAMES) {
+	if (beingHitFrame / 7 >= BEINGHIT_ANIMATION_FRAMES) {
 		beingHit = false;
-		beingHitCounter = 0;
+		beingHitFrame = 0;
 	}
 	if (maxHealth <= 0) dead = true;
 }
 
 void Monster::knockBack() {
-	if (beingHit && beingHitCounter==0) {
+	if (beingHit && beingHitFrame==0) {
 		yVel = -3;
 		if (getFlipType() == SDL_FLIP_NONE) xVel = -4;
 		else if(getFlipType() == SDL_FLIP_HORIZONTAL ) xVel = 4;
@@ -188,36 +188,36 @@ void Monster::knockBack() {
 
 void Monster::render(SDL_Rect& p_camera) {
 	if (walking) {
-		commonFunc::renderAnimation(tex, xPos, yPos, walkingClips[walkCounter / 4], p_camera, 0, NULL, getFlipType());
-		walkCounter++;
-		if (walkCounter / 4 >= WALKING_ANIMATION_FRAMES) walkCounter = 0;
+		commonFunc::renderAnimation(tex, xPos, yPos, walkingClips[walkFrame / 4], p_camera, 0, NULL, getFlipType());
+		walkFrame++;
+		if (walkFrame / 4 >= WALKING_ANIMATION_FRAMES) walkFrame = 0;
 	}
-	else walkCounter = 0;
+	else walkFrame = 0;
 
 	if (idling) {
-		commonFunc::renderAnimation(tex, xPos, yPos, idlingClips[idleCounter / 6], p_camera, 0, NULL, getFlipType());
-		idleCounter++;
-		if (idleCounter / 6 >= IDLING_ANIMATION_FRAMES) idleCounter = 0;
+		commonFunc::renderAnimation(tex, xPos, yPos, idlingClips[idleFrame / 6], p_camera, 0, NULL, getFlipType());
+		idleFrame++;
+		if (idleFrame / 6 >= IDLING_ANIMATION_FRAMES) idleFrame = 0;
 	}
-	else idleCounter = 0;
+	else idleFrame = 0;
 
 	if (falling) {
-		commonFunc::renderAnimation(tex, xPos, yPos, fallingClips[fallingCounter / 4], p_camera, 0, NULL, getFlipType());
-		fallingCounter++;
-		if (fallingCounter / 4 >= FALLING_ANIMATION_FRAMES) fallingCounter = 0;
+		commonFunc::renderAnimation(tex, xPos, yPos, fallingClips[fallingFrame / 4], p_camera, 0, NULL, getFlipType());
+		fallingFrame++;
+		if (fallingFrame / 4 >= FALLING_ANIMATION_FRAMES) fallingFrame = 0;
 	}
-	else fallingCounter = 0;
+	else fallingFrame = 0;
 
     if (attacking) {
-		commonFunc::renderAnimation(tex, xPos, yPos, attackingClips[attackingCounter / 7], p_camera, 0, NULL, getFlipType());
-		attackingCounter++;
-		if (attackingCounter / 7 >= ATTACKING_ANIMATION_FRAMES) attackingCounter = 0;
+		commonFunc::renderAnimation(tex, xPos, yPos, attackingClips[attackingFrame / 7], p_camera, 0, NULL, getFlipType());
+		attackingFrame++;
+		if (attackingFrame / 7 >= ATTACKING_ANIMATION_FRAMES) attackingFrame = 0;
 	}
-	else attackingCounter = 0;
+	else attackingFrame = 0;
 
 	if (beingHit) {
-		commonFunc::renderAnimation(tex, xPos, yPos, beingHitClips[beingHitCounter / 7], p_camera, 0, NULL, getFlipType());
-		beingHitCounter++;
+		commonFunc::renderAnimation(tex, xPos, yPos, beingHitClips[beingHitFrame / 7], p_camera, 0, NULL, getFlipType());
+		beingHitFrame++;
 	}
-	else beingHitCounter = 0;
+	else beingHitFrame = 0;
 }

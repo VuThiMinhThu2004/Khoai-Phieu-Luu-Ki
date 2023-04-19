@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "Tile.h"
+#include "LevelPart.h"
 
 using namespace std;
 
@@ -32,6 +33,17 @@ static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
 static SDL_Surface* surface = NULL;
 
+
+struct path_pos {
+	const char* path;
+	vector<float> monsterPos;
+	path_pos(vector<float> p_monsterPos, const char* p_path) {
+		path = p_path;
+		monsterPos =  p_monsterPos;
+	}
+};
+
+
 namespace commonFunc {
 	//Window
 	void renderWindow(const char* p_title, int p_width, int p_height);
@@ -48,8 +60,8 @@ namespace commonFunc {
 	//ls28: per-pixer-collision-detection
 	bool checkCollision(SDL_Rect a, SDL_Rect b);
 	bool touchesWood(SDL_Rect box, Tile* tiles[]);
-	bool touchesWood(SDL_Rect box, Tile* tiles[], int &stt);
-	//Font
+	bool touchesWood(SDL_Rect box, vector<LevelPart>& LevelPartList);
+	bool touchesWood(SDL_Rect box, vector<LevelPart>& LevelPartList, int& groundSTT, int& levelSTT);
 	bool loadFont(const char* filePath);
 	SDL_Texture* createText(string p_text, SDL_Color p_textColor);
 	
