@@ -236,7 +236,6 @@ void Player::render(SDL_Rect &p_camera) {
 		if (fallingFrame / 4 >= FALLING_ANIMATION_FRAMES) fallingFrame = 0;
 	}
 	else fallingFrame = 0;
-	
 	if (beingHit) {
 		commonFunc::renderAnimation(tex, xPos, yPos, idlingClips[idleFrame/6], p_camera, 0, NULL, getFlipType());
 		beingHitFrame++;
