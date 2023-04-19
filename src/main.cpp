@@ -5,6 +5,8 @@
 #include "Entity.h"
 #include "Player.h"
 #include "Timer.h"
+#include "Monster.h"
+
 using namespace std;
 
 SDL_Event event;
@@ -13,6 +15,7 @@ SDL_Texture* BackgroundTex = NULL;
 SDL_Texture* PotatoTex = NULL;
 SDL_Texture* TileTex = NULL;
 SDL_Texture* BulletTex = NULL;
+SDL_Texture* MonsterTex = NULL;
 
 //FPScounter
 LTimer fpsTimer;
@@ -35,20 +38,74 @@ void FPSCounter();
 bool setTiles(Tile* tiles[]);
 void gameloop();
 
-
-// int main(int argc, char* argv[]) {
-//     init();
+int main(int argc, char* argv[]) {
     
-//     if (!setTiles(tileSet)) {
-//         printf("Failed to load tile set!\n");
-//     }
+    commonFunc::loadFont("res/lazy.ttf");
+    if ( !init() ) {
+        printf("Failed to initialize!\n");
+        return 0;
+    }
+    
+    if (!setTiles(tileSet)) {
+        printf("Failed to load tile set!\n");
+    }
+
+
+    Player Potato(64*3, 64*5, PotatoTex);
+    Entity Background(0, 0, BackgroundTex);
+    Monster test(0, 0, MonsterTex);
+ 
+    fpsTimer.start();
+    SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+    
+    //Game loop
+    bool gameRunning = true;
+     
+    SDL_Event event;
+    while (gameRunning) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) gameRunning = false;
+            Potato.handleInputActive(event);
+        }
+        Potato.update();
+        Potato.handleCamera(camera, camVel);
+        commonFunc::clearRenderer();
+        //render tile
+        for (int i = 0; i < TOTAL_TILES; i++) {
+            commonFunc::renderTile(*tileSet[i], gTileClips[tileSet[i]->getType()], camera);
+        }
+
+        //bullet
+        for (int i = 0; i < knight.getBulletList().size(); i++) {
+            vector<Bullet*> bulletList = knight.getBulletList();
+            if (bulletList.at(i) != NULL) {
+                if (bulletList.at(i)->isMoving()) {
+                    bulletList.at(i)->render(camera, bulletTex);
+                    bulletList.at(i)->update();
+                }
+                else {
+                    delete bulletList.at(i);
+                    bulletList.at(i) = NULL;
+                    bulletList.erase(bulletList.begin() + i);
+                    knight.setBulletList(bulletList);
+                }
+            }
+        }
+
+        Potato.update();
+        Potato.handleCamera(camera,camVel);
             
-//     gameloop();
-//     //Giải phóng bộ nhớ
-//     //Giải phóng bộ nhớ
-//     commonFunc::cleanUp();
-//     return 0;
-// }
+       
+        commonFunc::renderTexture(Background, &camera);
+        commonFunc::renderPlayer(Potato, camera);
+        Potato.render(camera);
+        FPSCounter();
+        commonFunc::renderPresent();
+    }
+    //Giải phóng bộ nhớ
+    commonFunc::cleanUp();
+    return 0;
+}
 
 bool init(){//lazyfoo
     //Initialization flag
@@ -79,7 +136,9 @@ bool init(){//lazyfoo
     BackgroundTex = commonFunc::loadTexture("res/images/Background.jpg");
     PotatoTex = commonFunc::loadTexture("res/images/Potato.png");
     TileTex = commonFunc::loadTexture("res/images/TileMap.png");
-
+    MonsterTex = commonFunc::loadTexture("res/images/Monster.png");
+    BulletTex = commonFunc::loadTexture("res/images/Bullet.png");
+    
     commonFunc::loadFont("res/lazy.ttf");
 
     return success;
@@ -178,48 +237,4 @@ bool setTiles(Tile* tiles[]) {
     map.close();
     //If the map was loaded fine
     return tilesLoaded;
-}
-int main(int argc, char* argv[]) {
-    
-    commonFunc::loadFont("res/lazy.ttf");
-    if ( !init() ) {
-        printf("Failed to initialize!\n");
-        return 0;
-    }
-
-    if (!setTiles(tileSet)) {
-        printf("Failed to load tile set!\n");
-    }
-
-    Player Potato(0, 0, PotatoTex);
-    Entity Background(0, 0, BackgroundTex);
- 
-    fpsTimer.start();
-    SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-    
-    //Game loop
-    bool gameRunning = true;
-     
-    SDL_Event event;
-    while (gameRunning) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) gameRunning = false;
-            Potato.handleInputActive(event);
-        }
-        Potato.update();
-        Potato.handleCamera(camera, camVel);
-        commonFunc::clearRenderer();
-        for (int i = 0; i < TOTAL_TILES; i++) {
-            commonFunc::renderTile(*tileSet[i], gTileClips[tileSet[i]->getType()], camera);
-        }
-            
-       
-        commonFunc::renderTexture(Background, &camera);
-        commonFunc::renderPlayer(Potato, camera);
-        FPSCounter();
-        commonFunc::renderPresent();
-    }
-    //Giải phóng bộ nhớ
-    commonFunc::cleanUp();
-    return 0;
 }
