@@ -93,13 +93,13 @@ bool Game::loadMedia() {
 
     monsterSFX[0] = Mix_LoadWAV("res/sfx/monster.wav"); //died
     if (monsterSFX[0] == NULL) {
-        printf( "Failed to load skeleton sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        printf( "Failed to load monster sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
         success = false;
     }
 
     monsterSFX[1] = Mix_LoadWAV("res/sfx/monster1.wav"); //hit
     if (monsterSFX[1] == NULL) {
-        printf( "Failed to load skeleton sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
+        printf( "Failed to load monster sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
         success = false;
     }
 
@@ -190,7 +190,7 @@ void Game::render_update_Game() {
     render_update_LevelPart();
     render_update_bullet();
     render_update_player();
-    render_update_skeleton();
+    render_update_monster();
     render_update_Bredatory();
 
     FPSCounter();

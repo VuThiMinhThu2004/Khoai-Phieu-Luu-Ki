@@ -53,7 +53,7 @@ Player::Player(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_te
 
 //lazyfoo 26
 void Player::handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]) {
-	if (!dead) {
+	if (!isDead() && !Won()) {
 		if (events.type == SDL_KEYDOWN && events.key.repeat == 0) {
 			switch (events.key.keysym.sym) {
 			case SDLK_a:
@@ -106,9 +106,9 @@ void Player::handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]) {
 }
 
 
-void Player::update(Tile *tile[], vector<Monster*> MonsterList, Mix_Chunk* p_sfx[]) {
+void Player::update(Tile* tile[], vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect& camera) {
 	gravity();
-	if(!dead) getHit(MonsterList, p_sfx);
+	if(!dead) getHit(monsterList, p_sfx, camera);
 	// set trạng thái Player
 	if (xVel == 0 && grounded && !dead) idling = true;
 	else idling = false;
@@ -140,6 +140,7 @@ void Player::update(Tile *tile[], vector<Monster*> MonsterList, Mix_Chunk* p_sfx
 		//nhân vật đã đi quá màn hình sang trái, nó sẽ được đặt lại về vị trí ban đầu
 		// và giới hạn di chuyển của nhân vật sẽ được giữ nguyên.
 		if (getX() + PLAYER_WIDTH < 0) {
+			won = true;
 			xPos = -PLAYER_WIDTH;
 			collision.x = getX() + PLAYER_WIDTH;
 		}
@@ -187,6 +188,9 @@ void Player::gravity() {
 
 //lesson 30
 void Player::handleCamera(SDL_Rect& camera, float& camVel) {
+	
+	if(!isDead()) camera.x += camVel;
+	
 	float acc = 0.001;
 	// nếu camVel đã vượt quá một mức độ nhất định, tốc độ tăng sẽ giảm dần (acc giảm dần).	
 	if (camVel > 4) acc = 0.0003;
@@ -213,6 +217,27 @@ camera sẽ dừng di chuyển trên trục x và chỉ di chuyển theo trục 
 	
 	if (camera.y > LEVEL_HEIGHT - camera.h) {
 		camera.y = LEVEL_HEIGHT - camera.h;
+	}
+}
+
+void Player::getHit(vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect& camera) {
+	for (int i = 0; i < monsterList.size(); i++) {
+		if(monsterList.at(i) != NULL)
+			if ((monsterList.at(i)->getDistance() <= TILE_WIDTH * 1.5 && monsterList.at(i)->isAttacking() && getY() >= monsterList.at(i)->getY() - TILE_WIDTH && getY() <= monsterList.at(i)->getY() + TILE_WIDTH * 0.5)) {
+				dead = true;
+				Mix_PlayChannel(-1, p_sfx[hitSFX], 0);
+			}
+	}
+	if (getY() + PLAYER_HEIGHT >= LEVEL_HEIGHT || getX() - camera.x < 192 - 2*64) {
+		dead = true;
+		Mix_PlayChannel(-1, p_sfx[hitSFX], 0);
+	}
+}
+void Player::knockBack() {
+	if (beingHit) {
+		yVel += -4;
+		if (getFlipType() == SDL_FLIP_NONE) xPos += -100;
+		else if (getFlipType() == SDL_FLIP_HORIZONTAL) xPos += 10;
 	}
 }
 

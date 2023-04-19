@@ -46,7 +46,7 @@ private:
 
 	bool gameRunning = true;
 	
-	vector<Monster*> skeletonList;
+	vector<Monster*> MonsterList;
 	vector<Player> playerList;
 public:
 	Game() {
@@ -58,7 +58,7 @@ public:
 
 	bool createMap();
 	bool createLevel();
-	bool createSkeleton();
+	bool createMonster();
 	bool createPlayer();
 	bool createMenu();
 
@@ -69,7 +69,7 @@ public:
 	void render_update_LevelPart();
 	void render_update_bullet();
 	void render_update_player();
-	void render_update_skeleton();
+	void render_update_monster();
 	void render_update_Bredatory();
 	void render_update_Game();
 	void render_mainMenu();
@@ -77,6 +77,7 @@ public:
 	bool isRunning() { return gameRunning; }
 
 	void setSDL_Rect();
+	
 	void destroy() {
 		SDL_DestroyTexture(PotatoTex);
 		SDL_DestroyTexture(MonsterTex);

@@ -51,7 +51,7 @@ private:
 	vector<Bullet*> bulletList;
 	SDL_Rect collision;//lưu trữ kích thước và vị trí của Player để xử lý va chạm.
 	Mix_Chunk* playerSFX[4];
-	
+	bool won = false;
 public:
 	Player(float p_x, float p_y, SDL_Texture* p_tex);//khởi tạo player với tọa đồ và hình ảnh tương ứng
 	
@@ -63,11 +63,14 @@ public:
 	};
 
 	void handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]);
-	void update(Tile *tile[], vector<Monster*> MonsterList, Mix_Chunk* p_sfx[]);
+	void update(Tile* tile[], vector<Monster*> &monsternList, Mix_Chunk* p_sfx[], SDL_Rect& camera);
 	void jump();
 	void gravity();//tính toán tác động của trọng lực đến nhân vật người chơi.
-	void getHit(vector<Monster*> MonsterList, Mix_Chunk* p_sfx[]);
+	void getHit(vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect& camera);
 	bool isDead() { return dead; }
+
+	bool Won() { return won; }
+
 	void knockBack();
 	void render(SDL_Rect& p_camera);//vẽ player lên màn hình
 	void handleCamera(SDL_Rect& camera, float& camVel);//xử lí camera trong trò chơi: lesson 30
@@ -75,4 +78,14 @@ public:
 	SDL_Rect getCollision() const { return collision; } // trả về hình chữ nhật va chạm của nhân vật người chơi.
 	void setBulletList(vector<Bullet*> bulletList) { this->bulletList = bulletList; }
 	vector<Bullet*> getBulletList() const { return bulletList; } //trả về danh sách đạn được bắn ra bởi nhân vật người chơi.
+    
+	void resetPlayer() {
+		xPos = 64 * 3; 
+		yPos = LEVEL_HEIGHT - TILE_HEIGHT * 4;
+		xVel = 0;
+		yVel = 0;
+		won = false;
+		dead = false;
+	}
+
 };
