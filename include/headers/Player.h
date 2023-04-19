@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "RenderWindow.h"
 #include "Bullet.h"
+#include "Monster.h"
 
 using namespace std;
 
@@ -44,21 +45,30 @@ private:
 	bool beingHit = false;
 
 	
-	bool grounded = true;
 	float xVel = 0, yVel = 0;//vận tốc theo trục x và y của Player
-	
+	int groundSTT = 1; //số thứ tự của block đang đứng trên
+
 	vector<Bullet*> bulletList;
 	SDL_Rect collision;//lưu trữ kích thước và vị trí của Player để xử lý va chạm.
+	Mix_Chunk* playerSFX[4];
 	
 public:
 	Player(float p_x, float p_y, SDL_Texture* p_tex);//khởi tạo player với tọa đồ và hình ảnh tương ứng
 	
+	enum SFX {
+		hitSFX = 0,
+		jumpSFX = 1,
+		landSFX = 2,
+		shootSFX = 3,
+	};
 
-	void handleInputActive(SDL_Event &events);
-	void update();
+	void handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]);
+	void update(Tile *tile[], vector<Monster*> MonsterList, Mix_Chunk* p_sfx[]);
 	void jump();
 	void gravity();//tính toán tác động của trọng lực đến nhân vật người chơi.
-
+	void getHit(vector<Monster*> MonsterList, Mix_Chunk* p_sfx[]);
+	bool isDead() { return dead; }
+	void knockBack();
 	void render(SDL_Rect& p_camera);//vẽ player lên màn hình
 	void handleCamera(SDL_Rect& camera, float& camVel);//xử lí camera trong trò chơi: lesson 30
 

@@ -52,52 +52,63 @@ Player::Player(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_te
 }
 
 //lazyfoo 26
-void Player::handleInputActive(SDL_Event &events) {
-	if (events.type == SDL_KEYDOWN && events.key.repeat == 0) {
-		switch (events.key.keysym.sym) {
-		case SDLK_s:
-			yVel += PLAYER_VEL;
-			break;
-		case SDLK_a:
-			xVel -= PLAYER_VEL;
-			break;
-		case SDLK_d:		
-			xVel += PLAYER_VEL;
-			break;
-		case SDLK_SPACE:
-			if (grounded) {
-				jump();
+void Player::handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]) {
+	if (!dead) {
+		if (events.type == SDL_KEYDOWN && events.key.repeat == 0) {
+			switch (events.key.keysym.sym) {
+			case SDLK_a:
+				xVel -= PLAYER_VEL;
+				break;
+			case SDLK_d:
+				xVel += PLAYER_VEL;
+				break;
+			case SDLK_SPACE:
+				if (grounded) {
+					jump();
+					Mix_PlayChannel(-1, p_sfx[jumpSFX], 0);
+				}
+				break;
+			default:
+				break;
 			}
-			break;
-		default:
-			break;
 		}
-	}
-	else if (events.type == SDL_KEYUP && events.key.repeat == 0) {
-		switch (events.key.keysym.sym) {
-		case SDLK_s:
-			yVel -= PLAYER_VEL;
-			break;
-		case SDLK_a:
-			xVel += PLAYER_VEL;
-			break;
-		case SDLK_d:
-			xVel -= PLAYER_VEL;
-			break;
-		default:
-			break;
+		else if (events.type == SDL_KEYUP && events.key.repeat == 0) {
+			switch (events.key.keysym.sym) {
+			case SDLK_a:
+				xVel += PLAYER_VEL;
+				break;
+			case SDLK_d:
+				xVel -= PLAYER_VEL;
+				break;
+			case SDLK_SPACE:
+				if (!grounded && jumping) {
+					yVel *= .5f;
+				}
+				break;
+			default:
+				break;
+			}
 		}
-	}
-	else if (events.type == SDL_MOUSEBUTTONDOWN && events.key.repeat == 0) {
-
-	}
-	else if (events.type == SDL_MOUSEBUTTONUP && events.key.repeat == 0) {
-
+		else if (events.type == SDL_MOUSEBUTTONDOWN && events.key.repeat == 0) {
+			Bullet* bullet = new Bullet(getCollision().x + PLAYER_WIDTH * 1.25, getCollision().y, NULL);
+			if (events.button.button == SDL_BUTTON_LEFT) {
+				Mix_PlayChannel(-1, p_sfx[shootSFX], 0);
+				bullet->setFlipType(getFlipType());
+				bullet->setWidthHeight(DEFAULTBULLET_W, DEFAULTBULLET_H, getX());
+				bullet->setType(Bullet::NORMAL);
+			}
+			bullet->setMove(true);
+			bulletList.push_back(bullet);
+		}
+		else if (events.type == SDL_MOUSEBUTTONUP && events.key.repeat == 0) {
+		}
 	}
 }
 
-void Player::update() {
+
+void Player::update(Tile *tile[], vector<Monster*> MonsterList, Mix_Chunk* p_sfx[]) {
 	gravity();
+	if(!dead) getHit(MonsterList, p_sfx);
 	// set trạng thái Player
 	if (xVel == 0 && grounded && !dead) idling = true;
 	else idling = false;
@@ -137,18 +148,25 @@ void Player::update() {
 	//move y
 	yPos += yVel;
 	collision.y = getY() + PLAYER_HEIGHT;
-	//kiểm tra va chạm với cạnh trên của màn hình
 	if (getY() + PLAYER_HEIGHT < 0) {
 		yPos = -PLAYER_HEIGHT;
 		collision.y = getY() + PLAYER_HEIGHT;
 	}
-	//nếu đang nhảy lên
-	else if (yVel < 0) {
-		//đặt lại vị trí y của Player để nằm trên đất
-		yPos -= yVel;
-		yVel = 0;//dừng việc nhảy
+	if (commonFunc::touchesWood(collision, tile, groundSTT)) {
+		if (yVel > 0) {
+			yPos = tile[groundSTT]->getY() - 64 * 2 - 0.1 + 2;
+			if (falling) {
+				grounded = true;
+				Mix_PlayChannel(-1, p_sfx[landSFX], 0);
+			}
+		}
+		else if (yVel < 0) {
+			yPos -= yVel;
+			yVel = 0;
+		}
+		collision.y = getY() + PLAYER_HEIGHT;
 	}
-	collision.y = getY() + PLAYER_HEIGHT;
+	else grounded = false;
 }
 
 void Player::jump() {

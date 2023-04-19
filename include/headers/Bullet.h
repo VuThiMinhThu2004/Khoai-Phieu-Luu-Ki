@@ -24,7 +24,6 @@ private:
 	int bulletCounter = 0;
 	const int delay = 5;//tính thời gian trễ giữa các frame trong animation.
 
-	
 public:
 	enum bulletType {
 		NONE = 0,

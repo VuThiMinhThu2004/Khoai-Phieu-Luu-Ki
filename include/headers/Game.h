@@ -55,13 +55,17 @@ public:
 	bool init();
 	bool loadMedia();
 	void FPSCounter();
+
 	bool createMap();
 	bool createLevel();
 	bool createSkeleton();
 	bool createPlayer();
 	bool createMenu();
+
 	void start_BredatorySFX();
 	void playMusic();
+	void pauseMusicTime();//dừng phát nhạc khi trò chơi tạm dừng
+	
 	void render_update_LevelPart();
 	void render_update_bullet();
 	void render_update_player();
