@@ -17,10 +17,13 @@ private:
 	bool moving = false;
 	int bulletType;
 	SDL_Rect collision;
+	float xVel = 7;
 	
 	static const int BULLET_ANIMATION_FRAMES = 6;
 	SDL_Rect bulletClips[BULLET_ANIMATION_FRAMES];
 	int bulletCounter = 0;
+	const int delay = 5;//tính thời gian trễ giữa các frame trong animation.
+
 	
 public:
 	enum bulletType {
@@ -36,8 +39,9 @@ public:
 	int getType() const { return bulletType; }
 	bool isMoving() const { return moving; }
 	SDL_Rect getCollision() { return collision; }
-	void update();
-	//setter
+	void update(Tile* tile[]);
+
+	//setter: thay đổi các thuộc tính của đạn: loại, tình trạng di chuyeernm phần va chạm
 	void setFlipType(SDL_RendererFlip p_PlayerflipType);
 	void setType(const int& p_type) { bulletType = p_type; }
 	void setMove(bool p_move) { moving = p_move; }

@@ -28,7 +28,10 @@ private:
 	SDL_Texture* BackgroundTex = NULL;
 	SDL_Texture* ButtonTex = NULL;
 
-	
+	Mix_Music* backgroundMusic = NULL;
+	Mix_Chunk* BredatorySFX = NULL;
+	Mix_Chunk* playerSFX[4] = { NULL };
+	Mix_Chunk* monsterSFX[2] = { NULL };
 
 	//FPScounter
 	LTimer fpsTimer;

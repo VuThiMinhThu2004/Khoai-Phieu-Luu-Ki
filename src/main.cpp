@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
             if (bulletList.at(i) != NULL) {
                 if (bulletList.at(i)->isMoving()) {
                     bulletList.at(i)->render(camera, BulletTex);
-                    bulletList.at(i)->update();
+                    bulletList.at(i)->update(tileSet);
                 }
                 else {
                     delete bulletList.at(i);

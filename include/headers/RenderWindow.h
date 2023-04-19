@@ -47,7 +47,8 @@ namespace commonFunc {
 	//lesson 27: Collision boxes are a standard way to check collision between two objects
 	//ls28: per-pixer-collision-detection
 	bool checkCollision(SDL_Rect a, SDL_Rect b);
-
+	bool touchesWood(SDL_Rect box, Tile* tiles[]);
+	bool touchesWood(SDL_Rect box, Tile* tiles[], int &stt);
 	//Font
 	bool loadFont(const char* filePath);
 	SDL_Texture* createText(string p_text, SDL_Color p_textColor);

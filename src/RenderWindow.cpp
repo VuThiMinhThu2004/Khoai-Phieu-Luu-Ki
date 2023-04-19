@@ -170,3 +170,56 @@ void commonFunc::cleanUp() {
 	IMG_Quit();
 	SDL_Quit();//thoát khỏi SDL và giải phóng tất cả các tài nguyên của nó.
 }
+//lazyfoo
+bool commonFunc::checkCollision(SDL_Rect a, SDL_Rect b) {
+	int leftA, leftB;
+	int rightA, rightB;
+	int topA, topB;
+	int bottomA, bottomB;
+
+	leftA = a.x;
+	rightA = a.x + a.w;
+	topA = a.y;
+	bottomA = a.y + a.h;
+
+	leftB = b.x;
+	rightB = b.x + b.w;
+	topB = b.y;
+	bottomB = b.y + b.h;
+
+	if (bottomA < topB) {
+		return false;
+	}
+	if (topA > bottomB) {
+		return false;
+	}
+	if (rightA < leftB) {
+		return false;
+	}
+	if (leftA > rightB) {
+		return false;
+	}
+	return true;
+}
+bool commonFunc::touchesWood(SDL_Rect box, Tile* tiles[]) {
+	for (int i = 0; i < TOTAL_TILES; ++i) {
+		if ((tiles[i]->getType() >= 0) && (tiles[i]->getType() <= 84)) {
+			if (checkCollision(box, tiles[i]->getCollision())) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool commonFunc::touchesWood(SDL_Rect box, Tile* tiles[], int &stt) {
+	for (int i = 0; i < TOTAL_TILES; ++i) {
+		if ((tiles[i]->getType() >= 0) && (tiles[i]->getType() <= 84)) {
+			if (checkCollision(box, tiles[i]->getCollision())) {
+				stt = i;
+				return true;
+			}
+		}
+	}
+	return false;
+}
