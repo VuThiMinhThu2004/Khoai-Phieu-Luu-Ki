@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include <iostream>
-
 #include "Entity.h"
 #include "RenderWindow.h"
 #include "Bullet.h"
@@ -33,7 +31,8 @@ private:
 	int walkFrame = 0;
 	int jumpFrame = 0;
 	int fallingFrame = 0;
-
+	int deathFrame = 0;
+	int beingHitFrame = 0;
 
 	//lưu trữ trạng thái của Player: va chạm, đạn bắn ra, âm thanh và hiệu ứng hình ảnh.
 	bool grounded = false; //đứng trên mặt đất hay không.
@@ -41,7 +40,8 @@ private:
 	bool idling = true; //đang đứng yên hay không.
 	bool jumping = false; 
 	bool falling = true; 
-
+	bool dead = false;
+	bool beingHit = false;
 
 	
 	bool grounded = true;
@@ -56,7 +56,7 @@ public:
 
 	void handleInputActive(SDL_Event &events);
 	void update();
-	bool jump();
+	void jump();
 	void gravity();//tính toán tác động của trọng lực đến nhân vật người chơi.
 
 	void render(SDL_Rect& p_camera);//vẽ player lên màn hình
@@ -64,4 +64,5 @@ public:
 
 	SDL_Rect getCollision() const { return collision; } // trả về hình chữ nhật va chạm của nhân vật người chơi.
 	void setBullet(vector<Bullet*> bulletList) { this->bulletList = bulletList; }
+	vector<Bullet*> getBulletList() const { return bulletList; } //trả về danh sách đạn được bắn ra bởi nhân vật người chơi.
 };

@@ -97,30 +97,75 @@ void Player::handleInputActive(SDL_Event &events) {
 }
 
 void Player::update() {
+	gravity();
+	// set trạng thái Player
+	if (xVel == 0 && grounded && !dead) idling = true;
+	else idling = false;
+
+	if (xVel != 0 && grounded && !dead) running = true;
+	else running = false;
+
+	if (yVel > 0 && !grounded && !dead) falling = true;
+	else falling = false;
+
+	if (yVel <= 0 && !grounded && !dead) jumping = true;
+	else jumping = false;
+
+	//cập nhật hướng quay của nhân vật (flipType) nếu nhân vật đang di chuyển theo trục x.
+	if (!beingHit) {
+		if (xVel < 0) flipType = SDL_FLIP_HORIZONTAL;
+		if (xVel > 0) flipType = SDL_FLIP_NONE;
+	}
+
+	//lesson 26
+	//hàm này di chuyển nhân vật theo trục x và y nếu nhân vật chưa chết.
+	//Nó kiểm tra xem nhân vật có chạm tường hay không và điều chỉnh vị trí của nhân vật nếu cần.
 	//move x
-	xPos += xVel;
-	if (xPos < 0) xPos = 0;
-	if (xPos > LEVEL_WIDTH - currentFrame.w) xPos = LEVEL_WIDTH - currentFrame.w;
+	if (!dead) {
+		xPos += xVel;
+		collision.x = getX() + PLAYER_WIDTH;
+
+
+		//nhân vật đã đi quá màn hình sang trái, nó sẽ được đặt lại về vị trí ban đầu
+		// và giới hạn di chuyển của nhân vật sẽ được giữ nguyên.
+		if (getX() + PLAYER_WIDTH < 0) {
+			xPos = -PLAYER_WIDTH;
+			collision.x = getX() + PLAYER_WIDTH;
+		}
+	}
 
 	//move y
 	yPos += yVel;
-	if (yPos < 0) yPos = 0;
-	if (yPos > LEVEL_HEIGHT - currentFrame.h) yPos = LEVEL_HEIGHT - currentFrame.h;
+	collision.y = getY() + PLAYER_HEIGHT;
+	//kiểm tra va chạm với cạnh trên của màn hình
+	if (getY() + PLAYER_HEIGHT < 0) {
+		yPos = -PLAYER_HEIGHT;
+		collision.y = getY() + PLAYER_HEIGHT;
+	}
+	//nếu đang nhảy lên
+	else if (yVel < 0) {
+		//đặt lại vị trí y của Player để nằm trên đất
+		yPos -= yVel;
+		yVel = 0;//dừng việc nhảy
+	}
+	collision.y = getY() + PLAYER_HEIGHT;
+}
 
-	//Gravity
-	if (!grounded) {
-		yVel += GRAVITY;
+void Player::jump() {
+	if (grounded) {//đang đứng trên mặt đất
+		yVel -= 10;// tốc độ theo trục y của nhân vật: nếu yval < 0 thì làm cho nhân vật nhảy cao hơn: những lần nhảy liên tiếp
+		grounded = false;//nv k ở trên mặt đất = đang nhảy
 	}
 }
 
-bool Player::jump() {
-	if (grounded) {
-		yVel -= 5;
-		grounded = false;
-		return true;
+void Player::gravity() {
+	if (!grounded) {// đang k đứng trên mặt đất
+		yVel += GRAVITY;// để biểu thị lực hút lên nhân vật
+		if (yVel > MAX_GRAVITY) yVel = MAX_GRAVITY;//vượt quá tốc độ rơi max 
 	}
-	return false;
+	else yVel = GRAVITY;//nv ở trên mặt đất -> để đảm bảo nv k bay lên khi đang đứng yên
 }
+
 
 //lesson 30
 void Player::handleCamera(SDL_Rect& camera, float& camVel) {
@@ -191,3 +236,16 @@ void Player::render(SDL_Rect &p_camera) {
 		if (fallingFrame / 4 >= FALLING_ANIMATION_FRAMES) fallingFrame = 0;
 	}
 	else fallingFrame = 0;
+	
+	if (beingHit) {
+		commonFunc::renderAnimation(tex, xPos, yPos, idlingClips[idleFrame/6], p_camera, 0, NULL, getFlipType());
+		beingHitFrame++;
+	}
+	else beingHitFrame = 0;
+
+	if (dead) {
+		commonFunc::renderAnimation(tex, xPos, yPos, deathClips[deathFrame / 5], p_camera, 0, NULL, getFlipType());
+		if(deathFrame / 5 < DEATH_ANIMATION_FRAMES-1) deathFrame++;
+	}
+	else deathFrame = 0;
+}

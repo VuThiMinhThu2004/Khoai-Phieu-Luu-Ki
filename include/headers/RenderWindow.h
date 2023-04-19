@@ -1,16 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <math.h>
-#include <stdlib.h>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
-#include <sstream>
-
 #include "Entity.h"
 #include "Tile.h"
 
@@ -18,7 +7,7 @@ using namespace std;
 
 class Tile;
 const float GRAVITY = 0.3;//lực hấp dẫn
-const float MAX_GRAVITY = 15;//hạn chế tối đa của nó
+const float MAX_GRAVITY = 15;
 
 //screen
 const int SCREEN_WIDTH = 1280;

@@ -1,11 +1,4 @@
 #pragma once
-#include <iostream>
-#include <stdlib.h>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
-#include <sstream>//cung cấp các phương thức để đọc và ghi các giá trị vào hoặc ra một chuỗi ký tự (string) dưới dạng các đối tượng
 
 #include "RenderWindow.h"
 #include "Entity.h"
