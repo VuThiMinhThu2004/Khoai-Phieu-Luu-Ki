@@ -76,18 +76,18 @@ int main(int argc, char* argv[]) {
         }
 
         //bullet
-        for (int i = 0; i < knight.getBulletList().size(); i++) {
-            vector<Bullet*> bulletList = knight.getBulletList();
+        for (int i = 0; i < Potato.getBulletList().size(); i++) {
+            vector<Bullet*> bulletList = Potato.getBulletList();
             if (bulletList.at(i) != NULL) {
                 if (bulletList.at(i)->isMoving()) {
-                    bulletList.at(i)->render(camera, bulletTex);
+                    bulletList.at(i)->render(camera, BulletTex);
                     bulletList.at(i)->update();
                 }
                 else {
                     delete bulletList.at(i);
                     bulletList.at(i) = NULL;
                     bulletList.erase(bulletList.begin() + i);
-                    knight.setBulletList(bulletList);
+                    Potato.setBulletList(bulletList);
                 }
             }
         }

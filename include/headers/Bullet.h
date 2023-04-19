@@ -36,7 +36,7 @@ public:
 	int getType() const { return bulletType; }
 	bool isMoving() const { return moving; }
 	SDL_Rect getCollision() { return collision; }
-
+	void update();
 	//setter
 	void setFlipType(SDL_RendererFlip p_PlayerflipType);
 	void setType(const int& p_type) { bulletType = p_type; }

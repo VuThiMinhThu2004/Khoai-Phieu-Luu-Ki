@@ -63,6 +63,6 @@ public:
 	void handleCamera(SDL_Rect& camera, float& camVel);//xử lí camera trong trò chơi: lesson 30
 
 	SDL_Rect getCollision() const { return collision; } // trả về hình chữ nhật va chạm của nhân vật người chơi.
-	void setBullet(vector<Bullet*> bulletList) { this->bulletList = bulletList; }
+	void setBulletList(vector<Bullet*> bulletList) { this->bulletList = bulletList; }
 	vector<Bullet*> getBulletList() const { return bulletList; } //trả về danh sách đạn được bắn ra bởi nhân vật người chơi.
 };
