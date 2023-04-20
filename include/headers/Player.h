@@ -7,6 +7,8 @@
 
 using namespace std;
 
+class Monster;
+
 class Player : public Entity {
 private:
 	const int PLAYER_WIDTH = 64;
@@ -47,6 +49,7 @@ private:
 	
 	float xVel = 0, yVel = 0;//vận tốc theo trục x và y của Player
 	int groundSTT = 1; //số thứ tự của block đang đứng trên
+	int levelSTT = 1;
 
 	vector<Bullet*> bulletList;
 	SDL_Rect collision;//lưu trữ kích thước và vị trí của Player để xử lý va chạm.
@@ -63,7 +66,8 @@ public:
 	};
 
 	void handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]);
-	void update(Tile* tile[], vector<Monster*> &monsternList, Mix_Chunk* p_sfx[], SDL_Rect& camera);
+	void update(vector<LevelPart>& LevelPartList, vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect& camera);
+	
 	void jump();
 	void gravity();//tính toán tác động của trọng lực đến nhân vật người chơi.
 	void getHit(vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect& camera);

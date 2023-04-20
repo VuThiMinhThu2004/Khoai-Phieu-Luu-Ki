@@ -10,6 +10,8 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #include <sstream>
+#include <fstream>
+#include <ctime>
 
 using namespace std;
 

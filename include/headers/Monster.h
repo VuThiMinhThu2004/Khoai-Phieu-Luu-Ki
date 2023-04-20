@@ -5,8 +5,9 @@
 #include "Player.h"
 
 using namespace std;
+
 class Player;
-//lay tu player sang
+//copy tu player sang
 class Monster : public Entity {
 private:
 	const int MONSTER_WIDTH = 64;
@@ -43,20 +44,24 @@ private:
 	int maxHealth = 5;
 	int groundSTT = 1; //số thứ tự của block đang đứng trên
 	int levelSTT = 1;
+
 	float distanceToPlayer;
 	SDL_Rect collision;
 	
 public:
+
 	Monster(float p_x, float p_y, SDL_Texture* p_tex);
+
 	//ls27+28
-	void update(Player& p_playe, Tile* tile[]);
-	
+	void update(Player& p_player, vector<LevelPart>& LevelPartList, Mix_Chunk* p_sfx[], SDL_Rect& camera);
 	void gravity();
-	void autoMovement(Tile* tile[]);
-	void moveToPlayer(Player& p_player, Tile* tile[]);
+	void autoMovement(vector<LevelPart>& LevelPartList);
+	void moveToPlayer(Player& p_player, vector<LevelPart>& LevelPartList);
+	
 	bool isDead() { return dead; }
 	bool isAttacking();
-	void getHit(Player& p_player);
+	void getHit(Player& p_player, Mix_Chunk* p_sfx[], SDL_Rect& camera);//bị player tấn công
+
 	void knockBack();
 	void render(SDL_Rect& p_camera);
 

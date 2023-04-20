@@ -18,10 +18,12 @@ Bullet::Bullet(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_te
 }
 
 void Bullet::update(vector<LevelPart>& LevelPartList) {
-	if (bulletFrame/delay < 4) {
+	if (bulletFrame/delay < 5) {
 		xVel += BULLETSPEED;
+
 		if (getFlipType() == SDL_FLIP_HORIZONTAL) xPos -= xVel;
 		else if (getFlipType() == SDL_FLIP_NONE) xPos += xVel;
+
 		collision.x = getX();
 		if (getX()< 0) {
 			xPos = 0;
@@ -36,7 +38,6 @@ void Bullet::update(vector<LevelPart>& LevelPartList) {
 	}
 	if (bulletFrame/delay == BULLET_ANIMATION_FRAMES) setMove(false);
 }
-
 
 
 void Bullet::setFlipType(SDL_RendererFlip p_PlayerflipType) {

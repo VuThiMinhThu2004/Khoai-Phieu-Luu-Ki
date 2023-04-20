@@ -26,6 +26,8 @@ const int TILE_HEIGHT = 80;
 //các hằng số liên quan đến số lượng các phần, bản đồ và sprite trong mức chơi.
 const int TOTAL_TILES = 336;
 const int TOTAL_TILE_SPRITES = 187;
+const int TOTAL_LEVEL_PART = 3;
+const int TOTAL_MAP = 15;
 
 //các con trỏ tĩnh đến font, cửa sổ, trình kết xuất và bề mặt của SDL.
 static TTF_Font* font = NULL;
@@ -59,9 +61,8 @@ namespace commonFunc {
 	//lesson 27: Collision boxes are a standard way to check collision between two objects
 	//ls28: per-pixer-collision-detection
 	bool checkCollision(SDL_Rect a, SDL_Rect b);
-	bool touchesWood(SDL_Rect box, Tile* tiles[]);
 	bool touchesWood(SDL_Rect box, vector<LevelPart>& LevelPartList);
-	bool touchesWood(SDL_Rect box, vector<LevelPart>& LevelPartList, int& groundSTT, int& levelSTT);
+	bool touchesWood(SDL_Rect& box, vector<LevelPart>& LevelPartList,bool& grounded, int& groundSTT, int& levelSTT);
 	bool loadFont(const char* filePath);
 	SDL_Texture* createText(string p_text, SDL_Color p_textColor);
 	

@@ -46,11 +46,12 @@ LevelPart::LevelPart(float p_x, float p_y, const char* p_path, SDL_Texture* p_ti
                 tilesLoaded = false;
                 break;
             }
-            //Dịch x của tile tiếp theo
+            //Dịch x của tile tiếp theo: o tiep theo dc dat ben canh o truoc
             x += TILE_WIDTH;
 
-            //Nếu như đến giới hạn level
+            //Nếu như đến cuoi cap
             if (x >= getX() + LEVEL_WIDTH) {
+                //hàng hiện tại của các ô đã hoàn thành và cần bắt đầu hàng tiếp theo.
                 //Xuống dòng mới và làm lại
                 x = getX();
                 y += TILE_HEIGHT;
@@ -61,6 +62,7 @@ LevelPart::LevelPart(float p_x, float p_y, const char* p_path, SDL_Texture* p_ti
 }
 
 void LevelPart::render(SDL_Rect p_TileClips[], SDL_Rect& p_camera) {
+     //duyệt qua danh sách tilesList và vẽ từng Tile trên màn 
     for (int i = 0; i < tilesList.size(); i++) {
         commonFunc::renderTile(*tilesList.at(i), p_TileClips[tilesList.at(i)->getType()], p_camera);
     }
@@ -72,9 +74,24 @@ void LevelPart::setLevelX(LevelPart& p_level) {
         int dong = i / 21;
         int cot = (i - dong * 21) * TILE_WIDTH + getX();
         tilesList.at(i)->setX(cot);
+
+/*
+dam bao rằng tất cả các Tile trong đối tượng LevelPart mới được cập nhật vị trí của chúng
+ để nằm trong đúng vị trí tương đối so với đối tượng LevelPart được truyền vào làm tham số.
+*/
     }
 }
 
+void LevelPart::setLevelX(float p_x) {
+    x = p_x;
+    for (int i = 0; i < tilesList.size(); i++) {
+        int row = i / 21;
+        int collumn = (i - row*21) * TILE_WIDTH + getX();
+        tilesList.at(i)->setX(collumn);
+    }
+}
+
+//tạo các Tile object từ dữ liệu được lưu trữ trong một file và đặt chúng vào vị trí thích hợp trong màn chơi.
 void LevelPart::setTilesType(const char* p_path) {
     bool tilesLoaded = true;
     int x = getX(), y = getY();

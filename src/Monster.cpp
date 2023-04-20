@@ -1,4 +1,5 @@
 #include "Monster.h"
+#include "RenderWindow.h"
 
 //lesson14
 Monster::Monster(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
@@ -48,16 +49,16 @@ Monster::Monster(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_
 }
 
 
-void Monster::update(Player& p_player, Tile* tile[]) {
+void Monster::update(Player& p_player, vector<LevelPart>& LevelPartList, Mix_Chunk* p_sfx[], SDL_Rect& camera) {	
 	if (!beingHit) {
 		if (xVel < 0) flipType = SDL_FLIP_HORIZONTAL;//trái
 		if (xVel > 0) flipType = SDL_FLIP_NONE;//phải
 	}
 
-	gravity();
-	getHit(p_player);//nếu bị tấn công: sẽ thực hiện hành động knockback, cập nhật giá trị của các biến beingHit, knockBackTime, knockBackDir và health.
-	autoMovement(tile);
-	moveToPlayer(p_player, tile);
+	gravity();//cap nhat yvel
+	getHit(p_player, p_sfx, camera);//nếu bị tấn công: sẽ thực hiện hành động knockback, cập nhật giá trị của các biến beingHit, knockBackTime, knockBackDir và health.
+	autoMovement(LevelPartList);
+	moveToPlayer(p_player, LevelPartList);
 	knockBack();// lùi lại khi bị tấn công
 	
 	//update trạng thái monster
@@ -81,12 +82,14 @@ void Monster::update(Player& p_player, Tile* tile[]) {
 			collision.x = getX() + MONSTER_WIDTH;
 			xVel *= -1;//đổi chiều di chuyển
 		}
-		if (getX() + 2 * MONSTER_HEIGHT > LEVEL_WIDTH) {
+
+		if (getX() + 2 * MONSTER_HEIGHT > LEVEL_WIDTH) {//xem lai
 			xPos = LEVEL_WIDTH - 2 * MONSTER_HEIGHT;
 			collision.x = getX() + MONSTER_WIDTH;
 			xVel *= -1;
 		}
-		if (commonFunc::touchesWood(collision, tile)) {
+
+		if (commonFunc::touchesWood(collision, LevelPartList)) {//xem lai
 			xPos -= xVel;
 			collision.x = getX() + MONSTER_WIDTH;
 			xVel *= -1;
@@ -100,11 +103,11 @@ void Monster::update(Player& p_player, Tile* tile[]) {
 		yPos = -MONSTER_HEIGHT;
 		collision.y = getY() + MONSTER_HEIGHT;
 	}
-	if (commonFunc::touchesWood(collision, tile, groundSTT)) {
+	if (commonFunc::touchesWood(collision, LevelPartList, grounded, groundSTT, levelSTT)) {//chạm tường
 		if (yVel > 0) {//đối tượng đang rơi
-			yPos = tile[groundSTT]->getY() - 64 * 2 - 0.1 + 2;
+			yPos = LevelPartList.at(levelSTT).getTilesList().at(groundSTT)->getY() - 64 * 2;// tọa độ của ô cách đáy nhất mà đối tượng đang va chạm trên màn hình (lấy từ LevelPartList)
 			if (falling) {//nếu trước đấy đang rơi
-				grounded = true;
+				grounded = true;//cho bt đối tượng đứng trên mặt đất
 			}
 		}
 		else if (yVel < 0) {//đang nhảy lên
@@ -113,42 +116,55 @@ void Monster::update(Player& p_player, Tile* tile[]) {
 		}
 		collision.y = getY() + MONSTER_HEIGHT;
 	}
-	else grounded = false;
+	else grounded = false;//xem lai
 	
 }
 
 void Monster::gravity() {
 	if (!grounded) {
-		yVel += GRAVITY;
+		yVel += GRAVITY;//tang toc do roi
 		if (yVel > MAX_GRAVITY) yVel = MAX_GRAVITY;
 	}
 	else yVel = GRAVITY;
 }
 
-void Monster::moveToPlayer(Player& p_player, Tile* tile[]) {
-	distanceToPlayer = sqrt(pow(p_player.getX() - getX(), 2) + pow(p_player.getY() - getY(), 2));
+//lesson 29
+double distance( int x1, int y1, int x2, int y2 )// tính khoảng cách của 2 điểm 
+{
+    int deltaX = x2 - x1;
+    int deltaY = y2 - y1;
+    return sqrt(deltaX*deltaX + deltaY*deltaY);
+}
+
+void Monster::moveToPlayer(Player& p_player, vector<LevelPart>& LevelPartList) {
+	distanceToPlayer = distance(getX(),getY(),p_player.getX(),p_player.getY());
 	if (!beingHit) {
 		//trong tầm nhìn của Monster
 		if ((p_player.getY() >= getY() - TILE_WIDTH && p_player.getY() <= getY() + TILE_WIDTH * 0.5) && distanceToPlayer <= TILE_WIDTH * 7) {
 			if (p_player.getX() - getX() < 0) {
-				if (tile[groundSTT - 1]->getType() > 84) xVel = 0;
-				else xVel = -MONSTER_VEL;
+				if (LevelPartList.at(levelSTT).getTilesList().at(groundSTT - 1)->getType() > 84) 
+					xVel = 0;
+				else 
+					xVel = -MONSTER_VEL;
 			}
-			else if (tile[groundSTT + 1]->getType() > 84) xVel = 0;
+			else if (LevelPartList.at(levelSTT).getTilesList().at(groundSTT + 1)->getType() > 84) 
+				xVel = 0;
 			else xVel = MONSTER_VEL;
 		}
 	}
+	//Player nam trong vung tan cong cua monster
 	if ( (distanceToPlayer <= TILE_WIDTH * 1.5 || (p_player.getY() >= getY() - TILE_WIDTH * 2.5 && p_player.getY() <= getY() - 64 && distanceToPlayer <= TILE_WIDTH * 2.5)) && !dead && !beingHit && grounded) 
         attacking = true;
 	else attacking = false;
 }
 
-void Monster::autoMovement(Tile* tile[]) {
+void Monster::autoMovement(vector<LevelPart>& LevelPartList) {
 	if (grounded && !beingHit) {
-		if (tile[groundSTT + 1]->getType() > 84 && tile[groundSTT - 2]->getType() > 84) xVel = 0;
-		else if (tile[groundSTT + 1]->getType() > 84 && xVel > 0) xVel = -MONSTER_VEL * 0.5;
-		else if (tile[groundSTT - 1]->getType() > 84 && xVel < 0) xVel = MONSTER_VEL * 0.5;
-		else if (tile[groundSTT + 2]->getType() > 84 && tile[groundSTT - 2]->getType() > 84) xVel = 0;
+		//ô vuông bên phải và bên trái đều có loại ô vuông lớn hơn 84 (nghĩa là không phải mặt đất) thì Skeleton sẽ dừng lại
+		if (LevelPartList.at(levelSTT).getTilesList().at(groundSTT + 1)->getType() > 84 && LevelPartList.at(levelSTT).getTilesList().at(groundSTT - 2)->getType() > 84) xVel = 0;		
+		else if (LevelPartList.at(levelSTT).getTilesList().at(groundSTT + 1)->getType() > 84 && xVel > 0) xVel = -MONSTER_VEL * 0.5;
+		else if (LevelPartList.at(levelSTT).getTilesList().at(groundSTT - 1)->getType() > 84 && xVel < 0) xVel = MONSTER_VEL * 0.5;
+		else if (LevelPartList.at(levelSTT).getTilesList().at(groundSTT + 2)->getType() > 84 && LevelPartList.at(levelSTT).getTilesList().at(groundSTT - 2)->getType() > 84) xVel = 0;
 		else if(getFlipType() == SDL_FLIP_NONE) xVel = MONSTER_VEL * 0.5;
 		else if(getFlipType() == SDL_FLIP_HORIZONTAL) xVel = -MONSTER_VEL * 0.5;
 	}
@@ -159,7 +175,8 @@ bool Monster::isAttacking() {
 	return false;
 }
 
-void Monster::getHit(Player& p_player) {
+//monster bi danh, ha guc
+void Monster::getHit(Player& p_player, Mix_Chunk* p_sfx[], SDL_Rect& camera) {
 	for (int i = 0; i < p_player.getBulletList().size(); i++) {
 		if (p_player.getBulletList().at(i) != NULL) {
 			if (commonFunc::checkCollision(p_player.getBulletList().at(i)->getCollision(), getCollision())) {
@@ -171,11 +188,20 @@ void Monster::getHit(Player& p_player) {
 			}
 		}
 	}
+
+	if (beingHit && beingHitFrame == 0) Mix_PlayChannel(-1, p_sfx[1], 0);
+
 	if (beingHitFrame / 7 >= BEINGHIT_ANIMATION_FRAMES) {
 		beingHit = false;
 		beingHitFrame = 0;
 	}
-	if (maxHealth <= 0) dead = true;
+	
+	//con quái vật di chuyển quá xa về phía trái, nó sẽ được coi là đã rời khỏi vùng chơi và bị xóa khỏi trò chơi.	
+	if (maxHealth <= 0 || getY() + MONSTER_HEIGHT/2 > LEVEL_HEIGHT || getX() - camera.x < 192 - 2*64) {
+		dead = true;
+		beingHit = false;
+		Mix_PlayChannel(-1, p_sfx[0], 0);
+	}
 }
 
 void Monster::knockBack() {

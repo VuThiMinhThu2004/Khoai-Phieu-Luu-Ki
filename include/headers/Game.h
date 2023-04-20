@@ -1,20 +1,14 @@
 #pragma once
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
-#include <sstream>
-#include <fstream>
-#include <ctime>
-#include <cstdlib>
 
-#include "RenderWindow.h"
 #include "Entity.h"
+#include "RenderWindow.h"
 #include "Player.h"
 #include "Monster.h"
 #include "Timer.h"
 #include "Tile.h"
+#include "Menu.h"
+#include "LevelPart.h"
+
 using namespace std;
 
 
@@ -28,26 +22,42 @@ private:
 	SDL_Texture* BackgroundTex = NULL;
 	SDL_Texture* ButtonTex = NULL;
 
+	//The music that will be played: lesson 21
 	Mix_Music* backgroundMusic = NULL;
+	//The sound effects that will be used
 	Mix_Chunk* BredatorySFX = NULL;
 	Mix_Chunk* playerSFX[4] = { NULL };
 	Mix_Chunk* monsterSFX[2] = { NULL };
 
-	//FPScounter
-	LTimer fpsTimer;
+	//The frames per second timer
+	LTimer fpsTimer;//ls 24
+	//In memory text stream
 	stringstream timeText;
-	int countedFrames = 0;
+	stringstream hpText;
+	stringstream scoreText;
+	stringstream highscoreText;
+
+	int score = 0;
+	int highscore = 0;
+	//Start counting frames per second
+	int countedFrames = 0;//theo dõi số lượng khung được hiển thị.
 
 	SDL_Rect gTileClips[TOTAL_TILE_SPRITES];
 	SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-	float camVel = 1.5;
 	SDL_Rect Bredatory[8];
+
+	float camVel = 1.5;	
 	int exCounter = 0;
 
 	bool gameRunning = true;
 	
 	vector<Monster*> MonsterList;
 	vector<Player> playerList;
+
+	vector<path_pos> mapList;
+	vector<LevelPart> LevelPartList;
+	vector<Menu> menuList;
+	
 public:
 	Game() {
 		setSDL_Rect();
@@ -55,6 +65,7 @@ public:
 	bool init();
 	bool loadMedia();
 	void FPSCounter();
+	void renderScore();//hiển thị điểm số trên màn hình.
 
 	bool createMap();
 	bool createLevel();
@@ -71,12 +82,19 @@ public:
 	void render_update_player();
 	void render_update_monster();
 	void render_update_Bredatory();
+
+	void update_hight_score();
+
 	void render_update_Game();
 	void render_mainMenu();
+	void resetGame();
+
 	void handleGameInput(SDL_Event& event);
 	bool isRunning() { return gameRunning; }
 
-	void setSDL_Rect();
+	bool isRunning() { return gameRunning; }//trả về trạng thái trò chơi
+	vector<Menu> getMenuList() { return menuList; }
+	void setSDL_Rect();// thiết lập vị trí và kích thước của các đối tượng SDL_Rect 
 	
 	void destroy() {
 		SDL_DestroyTexture(PotatoTex);

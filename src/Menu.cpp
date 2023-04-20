@@ -22,7 +22,7 @@ Menu::Menu(SDL_Texture* buttonTex, SDL_Texture* mainMenuBGTex, SDL_Texture* retr
 	this->retryBGTex = retryBGTex;
 }
 
-void Menu::handleInput(SDL_Event& event, bool& p_gameRunning, Player& p_player, vector<Monster*>& p_monsterList, float& p_camVel, SDL_Rect& p_cam) {
+void Menu::handleInputActive(SDL_Event& event, bool& p_gameRunning, Player& p_player) {
 	switch (event.type) {
 	case SDL_MOUSEBUTTONDOWN:
 		if (event.button.button == SDL_BUTTON_LEFT) {
@@ -36,10 +36,10 @@ void Menu::handleInput(SDL_Event& event, bool& p_gameRunning, Player& p_player, 
 					p_gameRunning = false;
 				}
 			}
-			if (p_player.isDead() || p_player.Won()) {
+			if (p_player.isDead()) {
 				if (checkMouseHover(button1.x, button1.y)) {
 					pressed[2] = true;
-					resetGame(p_player, p_monsterList, p_camVel, p_cam);
+					resetGame(p_player);//xem lai
 				}
 				if (checkMouseHover(button2.x, button2.y)) {
 					pressed[3] = true;
@@ -58,13 +58,19 @@ void Menu::handleInput(SDL_Event& event, bool& p_gameRunning, Player& p_player, 
 			if (checkMouseHover(button2.x, button2.y) && !pressed[1]) selected[1] = true;
 			else selected[1] = false;
 		}
-		if (p_player.isDead() || p_player.Won()) {
+		if (p_player.isDead()) {
 			if (checkMouseHover(button1.x, button1.y) && !pressed[2]) selected[2] = true;
 			else selected[2] = false;
 			if (checkMouseHover(button2.x, button2.y) && !pressed[3]) selected[3] = true;
 			else selected[3] = false;
 		}
 		break;
+	case SDL_KEYDOWN:
+		if (event.key.repeat == 0) switch (event.key.keysym.sym) {
+		case SDLK_ESCAPE:
+			if (!paused) paused = true;
+			else paused = false;
+		}
 	default:
 		break;
 	}
@@ -91,8 +97,6 @@ void Menu::renderMainMenu() {
 }
 
 void Menu::renderRetryMenu() {
-	commonFunc::renderTexture(retryBGTex, 0, 0, 1280, 720);
-
 	if (selected[2]) commonFunc::renderTexture(buttonTex, button1.x, button1.y, 0, 0, &retryButtonClips[1]);
 	else if (!pressed[2]) commonFunc::renderTexture(buttonTex, button1.x, button1.y, 0, 0, &retryButtonClips[0]);
 	else {
@@ -108,21 +112,33 @@ void Menu::renderRetryMenu() {
 	}
 }
 
-void Menu::resetGame(Player& p_player, vector<Monster*>& p_monsterList, float& p_camVel, SDL_Rect& p_cam) {
-	p_player.resetPlayer();
-	p_cam.x = 0;
-	p_cam.y = 0;
-	p_camVel = 1.5;
-	for (int i = p_monsterList.size() - 1; i >= 0; i--) {
-		delete p_monsterList.at(i);
-		p_monsterList.at(i) = NULL;
-		p_monsterList.erase(p_monsterList.begin() + i);
-	}
+void Menu::resetGame(Player& p_player){
+	//p_player.resetPlayer();
+	reset = true;
 }
 
-bool Menu::checkMouseHover(const int p_x, const int p_y) {
+
+bool Menu::checkMouseHover(const int p_x, const int p_y) {//ls17
 	int x, y;
-	SDL_GetMouseState(&x, &y);
-	if (x >= p_x && y >= p_y && x <= p_x + BUTTON_WIDTH && y <= p_y + BUTTON_HEIGHT) return true;
-	return false;
+	SDL_GetMouseState(&x, &y);//kiểm tra vị trí chuột
+	
+	 //Check if mouse is in button
+    bool inside = true;
+	//Mouse is left of the button
+	if ( x < p_x ) {
+		inside = false;
+	}
+	//Mouse is right of the button
+	else if ( x > p_x + BUTTON_WIDTH ) {
+		inside = false;
+	}
+	//Mouse above the button
+	else if ( y < p_y ) {
+		inside = false;
+	}
+	//Mouse below the button
+	else if ( y > p_y + BUTTON_HEIGHT ) {
+		inside = false;
+	}
+	return inside;
 }

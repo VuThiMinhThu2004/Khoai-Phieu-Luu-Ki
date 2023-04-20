@@ -1,4 +1,5 @@
 ﻿#include "Player.h"
+#include "RenderWindow.h"
 
 //lesson 14
 Player::Player(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
@@ -53,8 +54,8 @@ Player::Player(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_te
 
 //lazyfoo 26
 void Player::handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]) {
-	if (!isDead() && !Won()) {
-		if (events.type == SDL_KEYDOWN && events.key.repeat == 0) {
+	if (!isDead()) {
+		if (events.type == SDL_KEYDOWN && events.key.repeat == 0) {//nhấn phím và không lặp lại
 			switch (events.key.keysym.sym) {
 			case SDLK_a:
 				xVel -= PLAYER_VEL;
@@ -89,6 +90,7 @@ void Player::handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]) {
 				break;
 			}
 		}
+		//co van de
 		else if (events.type == SDL_MOUSEBUTTONDOWN && events.key.repeat == 0) {
 			Bullet* bullet = new Bullet(getCollision().x + PLAYER_WIDTH * 1.25, getCollision().y, NULL);
 			if (events.button.button == SDL_BUTTON_LEFT) {
@@ -106,7 +108,7 @@ void Player::handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]) {
 }
 
 
-void Player::update(Tile* tile[], vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect& camera) {
+void Player::update(vector<LevelPart>& LevelPartList, vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect& camera) {
 	gravity();
 	if(!dead) getHit(monsterList, p_sfx, camera);
 	// set trạng thái Player
@@ -131,6 +133,7 @@ void Player::update(Tile* tile[], vector<Monster*> &monsterList, Mix_Chunk* p_sf
 	//lesson 26
 	//hàm này di chuyển nhân vật theo trục x và y nếu nhân vật chưa chết.
 	//Nó kiểm tra xem nhân vật có chạm tường hay không và điều chỉnh vị trí của nhân vật nếu cần.
+	
 	//move x
 	if (!dead) {
 		xPos += xVel;
@@ -140,7 +143,7 @@ void Player::update(Tile* tile[], vector<Monster*> &monsterList, Mix_Chunk* p_sf
 		//nhân vật đã đi quá màn hình sang trái, nó sẽ được đặt lại về vị trí ban đầu
 		// và giới hạn di chuyển của nhân vật sẽ được giữ nguyên.
 		if (getX() + PLAYER_WIDTH < 0) {
-			won = true;
+			//won = true;
 			xPos = -PLAYER_WIDTH;
 			collision.x = getX() + PLAYER_WIDTH;
 		}
@@ -153,21 +156,26 @@ void Player::update(Tile* tile[], vector<Monster*> &monsterList, Mix_Chunk* p_sf
 		yPos = -PLAYER_HEIGHT;
 		collision.y = getY() + PLAYER_HEIGHT;
 	}
-	if (commonFunc::touchesWood(collision, tile, groundSTT)) {
+
+	//kiểm tra va chạm với một bức tường hoặc đất
+	if (commonFunc::touchesWood(collision, LevelPartList, grounded, groundSTT, levelSTT)) {
+		
 		if (yVel > 0) {
-			yPos = tile[groundSTT]->getY() - 64 * 2 - 0.1 + 2;
+			//đặt lại vị trí y của Player để nằm trên bức tường hoặc đất
+			yPos = LevelPartList.at(levelSTT).getTilesList().at(groundSTT)->getY() - 64 * 2;
+			//nếu đang rơi
 			if (falling) {
 				grounded = true;
 				Mix_PlayChannel(-1, p_sfx[landSFX], 0);
 			}
 		}
-		else if (yVel < 0) {
+		else if (yVel < 0) {//dang nhay len
 			yPos -= yVel;
-			yVel = 0;
+			yVel = 0;//dung viec nhay
 		}
 		collision.y = getY() + PLAYER_HEIGHT;
 	}
-	else grounded = false;
+	else grounded = false;//xem lai
 }
 
 void Player::jump() {
@@ -186,7 +194,7 @@ void Player::gravity() {
 }
 
 
-//lesson 30
+//lesson 30:copy lazyfoo
 void Player::handleCamera(SDL_Rect& camera, float& camVel) {
 	
 	if(!isDead()) camera.x += camVel;
@@ -195,7 +203,7 @@ void Player::handleCamera(SDL_Rect& camera, float& camVel) {
 	// nếu camVel đã vượt quá một mức độ nhất định, tốc độ tăng sẽ giảm dần (acc giảm dần).	
 	if (camVel > 4) acc = 0.0003;
 	if (camVel > 5) acc = 0.00001;
-	camVel += acc; - SCREEN_HEIGHT / 2;
+	camVel += acc;
 /*giới hạn di chuyển camera: Camera sẽ không di chuyển quá giới hạn màn hình chơi.
 nếu người chơi đến gần phía bên phải màn hình (từ đầu màn hình tới 2/3 chiều rộng của màn hình)
 camera sẽ dừng di chuyển trên trục x và chỉ di chuyển theo trục y để giữ cho người chơi luôn nằm giữa màn hình
@@ -234,9 +242,9 @@ void Player::getHit(vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect&
 	}
 }
 void Player::knockBack() {
-	if (beingHit) {
-		yVel += -4;
-		if (getFlipType() == SDL_FLIP_NONE) xPos += -100;
+	if (beingHit && beingHitFrame == 0) {//da bi tan cong
+		yVel -= 4;
+		if (getFlipType() == SDL_FLIP_NONE) xPos -= 100;
 		else if (getFlipType() == SDL_FLIP_HORIZONTAL) xPos += 10;
 	}
 }
