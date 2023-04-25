@@ -1,20 +1,16 @@
 #include "Monster.h"
-#include "RenderWindow.h"
+#include <cmath>
 
 //lesson14
 Monster::Monster(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
 	collision.x = getX() + MONSTER_WIDTH;
 	collision.y = getY() +  MONSTER_HEIGHT;
-	collision.w =  MONSTER_WIDTH;
-	collision.h =  MONSTER_HEIGHT;
+	collision.w =  MONSTER_WIDTH - 12;
+	collision.h =  MONSTER_HEIGHT - 2;
 
 	for (int i = 0; i < WALKING_ANIMATION_FRAMES; i++) {
 		walkingClips[i].x = i * (getFrame().w / 4);
-		if (i >= 4) {
-			walkingClips[i].x = (i - 4) * (getFrame().w / 4);
-			walkingClips[i].y = (getFrame().h / 5) * 2;
-		}
-		else walkingClips[i].y = getFrame().h / 5;
+		walkingClips[i].y = getFrame().h / 5;
 		walkingClips[i].w = getFrame().w / 4;
 		walkingClips[i].h = getFrame().h / 5;
 	}
@@ -35,12 +31,12 @@ Monster::Monster(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_
 
 	for (int i = 0; i < ATTACKING_ANIMATION_FRAMES; i++) {
 		attackingClips[i].x = i * (getFrame().w / 4);
-		attackingClips[i].y = (getFrame().h / 5) * 4;
+		attackingClips[i].y = (getFrame().h / 5) * 3;
 		attackingClips[i].w = getFrame().w / 4;
 		attackingClips[i].h = getFrame().h / 5;
 	}
 
-    for (int i = 0; i < BEINGHIT_ANIMATION_FRAMES; i++) {
+	for (int i = 0; i < BEINGHIT_ANIMATION_FRAMES; i++) {
 		beingHitClips[i].x = i * (getFrame().w / 4);
 		beingHitClips[i].y = (getFrame().h / 5) * 2;
 		beingHitClips[i].w = getFrame().w / 4;
@@ -83,11 +79,11 @@ void Monster::update(Player& p_player, vector<LevelPart>& LevelPartList, Mix_Chu
 			xVel *= -1;//đổi chiều di chuyển
 		}
 
-		if (getX() + 2 * MONSTER_HEIGHT > LEVEL_WIDTH) {//xem lai
-			xPos = LEVEL_WIDTH - 2 * MONSTER_HEIGHT;
-			collision.x = getX() + MONSTER_WIDTH;
-			xVel *= -1;
-		}
+		// if (getX() + 2 * MONSTER_HEIGHT > LEVEL_WIDTH) {//xem lai
+		// 	xPos = LEVEL_WIDTH - 2 * MONSTER_HEIGHT;
+		// 	collision.x = getX() + MONSTER_WIDTH;
+		// 	xVel *= -1;
+		// }
 
 		if (commonFunc::touchesWood(collision, LevelPartList)) {//xem lai
 			xPos -= xVel;
@@ -116,8 +112,7 @@ void Monster::update(Player& p_player, vector<LevelPart>& LevelPartList, Mix_Chu
 		}
 		collision.y = getY() + MONSTER_HEIGHT;
 	}
-	else grounded = false;//xem lai
-	
+	//else grounded = false;//xem lai	
 }
 
 void Monster::gravity() {
@@ -129,10 +124,9 @@ void Monster::gravity() {
 }
 
 //lesson 29
-double distance( int x1, int y1, int x2, int y2 )// tính khoảng cách của 2 điểm 
-{
-    int deltaX = x2 - x1;
-    int deltaY = y2 - y1;
+double distance( float x1, float y1, float x2, float y2 ) {// tính khoảng cách của 2 điểm 
+    float deltaX = x2 - x1;
+    float deltaY = y2 - y1;
     return sqrt(deltaX*deltaX + deltaY*deltaY);
 }
 
@@ -149,13 +143,15 @@ void Monster::moveToPlayer(Player& p_player, vector<LevelPart>& LevelPartList) {
 			}
 			else if (LevelPartList.at(levelSTT).getTilesList().at(groundSTT + 1)->getType() > 84) 
 				xVel = 0;
-			else xVel = MONSTER_VEL;
+			else 
+				xVel = MONSTER_VEL;
 		}
 	}
 	//Player nam trong vung tan cong cua monster
 	if ( (distanceToPlayer <= TILE_WIDTH * 1.5 || (p_player.getY() >= getY() - TILE_WIDTH * 2.5 && p_player.getY() <= getY() - 64 && distanceToPlayer <= TILE_WIDTH * 2.5)) && !dead && !beingHit && grounded) 
         attacking = true;
-	else attacking = false;
+	else 
+		attacking = false;
 }
 
 void Monster::autoMovement(vector<LevelPart>& LevelPartList) {

@@ -1,5 +1,4 @@
 ﻿#include "RenderWindow.h"
-#include "Entity.h"
 
 using namespace std;
 
@@ -42,10 +41,12 @@ void commonFunc::renderTexture(Entity& entity, SDL_Rect *rec, SDL_Rect *camera, 
 		dst.w = rec->w;
 		dst.h = rec->h;
 	}
+
 	if (camera != NULL) {
 		dst.x = dst.x - camera->x;
 		dst.y = dst.y - camera->y;
 	}
+
 	SDL_RenderCopyEx(renderer, entity.getTex(), rec, &dst, angle, center, flip);
 }
 
@@ -63,10 +64,12 @@ void commonFunc::renderTexture(SDL_Texture* p_tex, float p_x, float p_y, float p
 		dst.w = rec->w;
 		dst.h = rec->h;
 	}
+
 	if (camera != NULL) {
 		dst.x = dst.x - camera->x;
 		dst.y = dst.y - camera->y;
 	}
+
 	SDL_RenderCopyEx(renderer, p_tex, rec, &dst, angle, center, flip);
 }
 
@@ -154,7 +157,6 @@ void commonFunc::renderPresent() {
 	SDL_RenderPresent(renderer);////Update screen
 }
 
-
 //giải phóng tài nguyên và thoát khỏi SDL, Mix, TTF và IMG.
 void commonFunc::cleanUp() {
 	SDL_DestroyWindow(window);
@@ -170,8 +172,10 @@ void commonFunc::cleanUp() {
 	IMG_Quit();
 	SDL_Quit();//thoát khỏi SDL và giải phóng tất cả các tài nguyên của nó.
 }
+
 //lazyfoo
 bool commonFunc::checkCollision(SDL_Rect a, SDL_Rect b) {
+	//tọa độ các cạnh của hình chữ nhật a và b.
 	int leftA, leftB;
 	int rightA, rightB;
 	int topA, topB;
@@ -187,18 +191,24 @@ bool commonFunc::checkCollision(SDL_Rect a, SDL_Rect b) {
 	topB = b.y;
 	bottomB = b.y + b.h;
 
-	if (bottomA < topB) {
+	//hai hình chữ nhật không giao nhau theo chiều dọc.
+	if (bottomA <= topB) {
 		return false;
 	}
-	if (topA > bottomB) {
+
+	if (topA >= bottomB) {
 		return false;
 	}
-	if (rightA < leftB) {
+
+	//hai hình chữ nhật không giao nhau theo chiều ngang.
+	if (rightA <= leftB) {
 		return false;
 	}
-	if (leftA > rightB) {
+
+	if (leftA >= rightB) {
 		return false;
 	}
+
 	return true;
 }
 

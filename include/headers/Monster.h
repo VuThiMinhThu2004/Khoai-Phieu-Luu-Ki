@@ -1,8 +1,10 @@
 #pragma once
+#include <iostream>
 
-#include "RenderWindow.h"
 #include "Entity.h"
+#include "RenderWindow.h"
 #include "Player.h"
+#include "LevelPart.h"
 
 using namespace std;
 
@@ -14,7 +16,7 @@ private:
 	const int MONSTER_HEIGHT = 64;
 	const int MONSTER_VEL = 4;
 
-	static const int WALKING_ANIMATION_FRAMES = 8;
+	static const int WALKING_ANIMATION_FRAMES = 4;
 	static const int IDLING_ANIMATION_FRAMES = 4;
 	static const int FALLING_ANIMATION_FRAMES = 4;
 	static const int ATTACKING_ANIMATION_FRAMES = 4;
@@ -41,7 +43,7 @@ private:
 	bool dead = false;
 
 	float xVel = 0, yVel = 0;
-	int maxHealth = 5;
+	int maxHealth = 3;
 	int groundSTT = 1; //số thứ tự của block đang đứng trên
 	int levelSTT = 1;
 
@@ -54,6 +56,7 @@ public:
 
 	//ls27+28
 	void update(Player& p_player, vector<LevelPart>& LevelPartList, Mix_Chunk* p_sfx[], SDL_Rect& camera);
+	
 	void gravity();
 	void autoMovement(vector<LevelPart>& LevelPartList);
 	void moveToPlayer(Player& p_player, vector<LevelPart>& LevelPartList);

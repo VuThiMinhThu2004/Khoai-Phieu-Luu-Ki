@@ -40,8 +40,7 @@ LevelPart::LevelPart(float p_x, float p_y, const char* p_path, SDL_Texture* p_ti
                 tilesList.push_back(tile);
             }
             //Nếu như tileType ko thoả mãn
-            else
-            {
+            else {
                 printf("Error loading map: Invalid tile type at %d!\n", i);
                 tilesLoaded = false;
                 break;
@@ -71,14 +70,14 @@ void LevelPart::render(SDL_Rect p_TileClips[], SDL_Rect& p_camera) {
 void LevelPart::setLevelX(LevelPart& p_level) {
     x = p_level.getX() + LEVEL_WIDTH;
     for (int i = 0; i < tilesList.size(); i++) {
-        int dong = i / 21;
-        int cot = (i - dong * 21) * TILE_WIDTH + getX();
-        tilesList.at(i)->setX(cot);
+        int row = i / 21;
+        int collumn = (i - row * 21) * TILE_WIDTH + getX();
+        tilesList.at(i)->setX(collumn);
 
-/*
-dam bao rằng tất cả các Tile trong đối tượng LevelPart mới được cập nhật vị trí của chúng
- để nằm trong đúng vị trí tương đối so với đối tượng LevelPart được truyền vào làm tham số.
-*/
+        /*
+        dam bao rằng tất cả các Tile trong đối tượng LevelPart mới được cập nhật vị trí của chúng
+        để nằm trong đúng vị trí tương đối so với đối tượng LevelPart được truyền vào làm tham số.
+        */
     }
 }
 
@@ -124,8 +123,7 @@ void LevelPart::setTilesType(const char* p_path) {
                 tilesList.at(i)->setType(tileType);
             }
             //Nếu như tileType ko thoả mãn
-            else
-            {
+            else {
                 printf("Error loading map: Invalid tile type at %d!\n", i);
                 tilesLoaded = false;
                 break;

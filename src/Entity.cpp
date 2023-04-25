@@ -2,7 +2,7 @@
 
 // Hàm khởi tạo các biến x, y, tex và currentFrame
 Entity::Entity(float p_x, float p_y, SDL_Texture* p_tex) 
-	:xPos(p_x), yPos(p_y), tex(p_tex)
+		: xPos(p_x), yPos(p_y), tex(p_tex)
 {
 	currentFrame.x = 0;
 	currentFrame.y = 0;

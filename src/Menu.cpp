@@ -39,7 +39,7 @@ void Menu::handleInputActive(SDL_Event& event, bool& p_gameRunning, Player& p_pl
 			if (p_player.isDead()) {
 				if (checkMouseHover(button1.x, button1.y)) {
 					pressed[2] = true;
-					resetGame(p_player);//xem lai
+					reset = true;
 				}
 				if (checkMouseHover(button2.x, button2.y)) {
 					pressed[3] = true;
@@ -112,12 +112,6 @@ void Menu::renderRetryMenu() {
 	}
 }
 
-void Menu::resetGame(Player& p_player){
-	//p_player.resetPlayer();
-	reset = true;
-}
-
-
 bool Menu::checkMouseHover(const int p_x, const int p_y) {//ls17
 	int x, y;
 	SDL_GetMouseState(&x, &y);//kiểm tra vị trí chuột
@@ -140,5 +134,6 @@ bool Menu::checkMouseHover(const int p_x, const int p_y) {//ls17
 	else if ( y > p_y + BUTTON_HEIGHT ) {
 		inside = false;
 	}
+	
 	return inside;
 }

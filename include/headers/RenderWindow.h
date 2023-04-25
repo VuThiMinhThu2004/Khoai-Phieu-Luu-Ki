@@ -1,13 +1,17 @@
 #pragma once
 
+#include <iostream>
+
 #include "Entity.h"
-#include "Tile.h"
 #include "LevelPart.h"
+#include "Tile.h"
 
 using namespace std;
 
+class LevelPart;
 class Tile;
-const float GRAVITY = 0.3;//lực hấp dẫn
+
+const float GRAVITY = 0.35;//lực hấp dẫn
 const float MAX_GRAVITY = 15;
 
 //screen
@@ -19,15 +23,15 @@ const int LEVEL_WIDTH = 1344;
 const int LEVEL_HEIGHT = 1024;
 
 //tile
-const int TILE_WIDTH = 80;
-const int TILE_HEIGHT = 80;
+const int TILE_WIDTH = 64;
+const int TILE_HEIGHT = 64;
 
 
 //các hằng số liên quan đến số lượng các phần, bản đồ và sprite trong mức chơi.
 const int TOTAL_TILES = 336;
 const int TOTAL_TILE_SPRITES = 187;
 const int TOTAL_LEVEL_PART = 3;
-const int TOTAL_MAP = 15;
+const int TOTAL_MAP = 5;//xem lai
 
 //các con trỏ tĩnh đến font, cửa sổ, trình kết xuất và bề mặt của SDL.
 static TTF_Font* font = NULL;
@@ -45,11 +49,11 @@ struct path_pos {
 	}
 };
 
-
+//tải và hiển thị texture, tạo văn bản, kiểm tra va chạm và các hàm khác.
 namespace commonFunc {
 	//Window
 	void renderWindow(const char* p_title, int p_width, int p_height);
-	
+
 	//Texture: lazyfoo
 	SDL_Texture* loadTexture(const char* p_filePath);
 	void renderTexture(Entity& entity, SDL_Rect *rec = NULL, SDL_Rect *camera = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
@@ -60,12 +64,14 @@ namespace commonFunc {
 
 	//lesson 27: Collision boxes are a standard way to check collision between two objects
 	//ls28: per-pixer-collision-detection
-	bool checkCollision(SDL_Rect a, SDL_Rect b);
-	bool touchesWood(SDL_Rect box, vector<LevelPart>& LevelPartList);
+	bool checkCollision(SDL_Rect a, SDL_Rect b);//Box collision detector
+	bool touchesWood(SDL_Rect& box, vector<LevelPart>& LevelPartList);
 	bool touchesWood(SDL_Rect& box, vector<LevelPart>& LevelPartList,bool& grounded, int& groundSTT, int& levelSTT);
+
+	//Font
 	bool loadFont(const char* filePath);
 	SDL_Texture* createText(string p_text, SDL_Color p_textColor);
-	
+
 	void Color();
 	void clearRenderer();
 	void renderPresent();

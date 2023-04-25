@@ -1,9 +1,11 @@
 ﻿#pragma once
+#include <iostream>
 
 #include "Entity.h"
 #include "RenderWindow.h"
 #include "Bullet.h"
 #include "Monster.h"
+#include "LevelPart.h"
 
 using namespace std;
 
@@ -50,15 +52,18 @@ private:
 	float xVel = 0, yVel = 0;//vận tốc theo trục x và y của Player
 	int groundSTT = 1; //số thứ tự của block đang đứng trên
 	int levelSTT = 1;
-
-	vector<Bullet*> bulletList;
+	
 	SDL_Rect collision;//lưu trữ kích thước và vị trí của Player để xử lý va chạm.
+	vector<Bullet*> bulletList;// lưu trữ danh sách các đạn mà Player bắn ra.
 	Mix_Chunk* playerSFX[4];
+
 	bool won = false;
 public:
 	Player(float p_x, float p_y, SDL_Texture* p_tex);//khởi tạo player với tọa đồ và hình ảnh tương ứng
 	
-	enum SFX {
+	int maxHP = 100;
+
+	enum SFX {//hằng số để đại diện cho các âm thanh và hiệu ứng hình ảnh được sử dụng trong trò chơi.
 		hitSFX = 0,
 		jumpSFX = 1,
 		landSFX = 2,
@@ -66,30 +71,31 @@ public:
 	};
 
 	void handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]);
-	void update(vector<LevelPart>& LevelPartList, vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect& camera);
-	
+	//cập nhật trạng thái của nhân vật người chơi, ví dụ như di chuyển, va chạm với các vật thể khác, và xử lý các sự kiện trong trò chơi.
+	void update(vector<LevelPart>& LevelPartList, vector<Monster*> &skeletonList, Mix_Chunk* p_sfx[], SDL_Rect& camera);
 	void jump();
 	void gravity();//tính toán tác động của trọng lực đến nhân vật người chơi.
-	void getHit(vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect& camera);
+	void getHit(vector<Monster*> &skeletonList, Mix_Chunk* p_sfx[], SDL_Rect& camera);//xử lý khi nhân vật người chơi bị tấn công bởi quái vật.
 	bool isDead() { return dead; }
-
-	bool Won() { return won; }
-
 	void knockBack();
-	void render(SDL_Rect& p_camera);//vẽ player lên màn hình
 	void handleCamera(SDL_Rect& camera, float& camVel);//xử lí camera trong trò chơi: lesson 30
-
-	SDL_Rect getCollision() const { return collision; } // trả về hình chữ nhật va chạm của nhân vật người chơi.
-	void setBulletList(vector<Bullet*> bulletList) { this->bulletList = bulletList; }
-	vector<Bullet*> getBulletList() const { return bulletList; } //trả về danh sách đạn được bắn ra bởi nhân vật người chơi.
-    
-	void resetPlayer() {
+	void render(SDL_Rect& p_camera);//vẽ player lên màn hình
+	void resetPlayer() {//khởi tạo lại trạng thái ban đầu của nhân vật người chơi.
+		
+		//thiết lập các biến(các trạng thái) thành giá trị ban đầu 
 		xPos = 64 * 3; 
-		yPos = LEVEL_HEIGHT - TILE_HEIGHT * 4;
+		yPos = LEVEL_HEIGHT - TILE_HEIGHT * 5;
 		xVel = 0;
 		yVel = 0;
-		won = false;
 		dead = false;
+		maxHP = 100;
+		flipType = SDL_FLIP_NONE;
 	}
 
+	// thiết lập danh sách đạn được bắn ra bởi nhân vật người chơi.
+	void setBulletList(vector<Bullet*> bulletList) { this->bulletList = bulletList; }
+
+	//getter
+	vector<Bullet*> getBulletList() const { return bulletList; } //trả về danh sách đạn được bắn ra bởi nhân vật người chơi.
+	SDL_Rect getCollision() const { return collision; } // trả về hình chữ nhật va chạm của nhân vật người chơi.
 };

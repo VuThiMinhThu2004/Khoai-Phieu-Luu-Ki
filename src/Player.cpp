@@ -1,5 +1,4 @@
 ﻿#include "Player.h"
-#include "RenderWindow.h"
 
 //lesson 14
 Player::Player(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
@@ -55,15 +54,16 @@ Player::Player(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_te
 //lazyfoo 26
 void Player::handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]) {
 	if (!isDead()) {
-		if (events.type == SDL_KEYDOWN && events.key.repeat == 0) {//nhấn phím và không lặp lại
+		//nhấn phím và không lặp lại, ta sẽ kiểm tra mã phím được nhấn và xử lý tương ứng với từng trường hợp
+		if (events.type == SDL_KEYDOWN && events.key.repeat == 0) {//&& events.key.repeat == 0
 			switch (events.key.keysym.sym) {
 			case SDLK_a:
-				xVel -= PLAYER_VEL;
+				xVel -= PLAYER_VEL;//xvel la van toc dua vao day quyet dinh flipType
 				break;
 			case SDLK_d:
 				xVel += PLAYER_VEL;
 				break;
-			case SDLK_SPACE:
+			case SDLK_w:
 				if (grounded) {
 					jump();
 					Mix_PlayChannel(-1, p_sfx[jumpSFX], 0);
@@ -73,6 +73,7 @@ void Player::handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]) {
 				break;
 			}
 		}
+		//nhả phím và không lặp lại, ta cũng kiểm tra mã phím và xử lý tương ứng với từng trường hợp.
 		else if (events.type == SDL_KEYUP && events.key.repeat == 0) {
 			switch (events.key.keysym.sym) {
 			case SDLK_a:
@@ -81,7 +82,7 @@ void Player::handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]) {
 			case SDLK_d:
 				xVel -= PLAYER_VEL;
 				break;
-			case SDLK_SPACE:
+			case SDLK_w:
 				if (!grounded && jumping) {
 					yVel *= .5f;
 				}
@@ -90,19 +91,37 @@ void Player::handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]) {
 				break;
 			}
 		}
-		//co van de
-		else if (events.type == SDL_MOUSEBUTTONDOWN && events.key.repeat == 0) {
-			Bullet* bullet = new Bullet(getCollision().x + PLAYER_WIDTH * 1.25, getCollision().y, NULL);
+		//bấm chuột và không lặp lại, ta kiểm tra xem nút chuột được bấm có phải là nút trái hay không
+		else if (events.type == SDL_MOUSEBUTTONDOWN && events.key.repeat == 0) {//lesson 17
 			if (events.button.button == SDL_BUTTON_LEFT) {
+				//là nút trái, ta tạo một đối tượng đạn mới, đặt vị trí xuất phát của đạn ở phía trên bên phải của nhân vật
+				// và thêm đạn vào danh sách đạn. Ta cũng phát âm thanh tương ứng.
+
+				//tạo một đối tượng đạn mới bằng cách khởi tạo một con trỏ đối tượng đạn.
+				// tọa độ x của đạn, được tính bằng cách lấy tọa độ x của lớp người chơi (getCollision().x) cộng với chiều rộng của người chơi (PLAYER_WIDTH) nhân với một hằng số (1.25).
+				//Tham số thứ hai là tọa độ y của đạn, được lấy từ tọa độ y của người chơi (getCollision().y).
+				//Tham số thứ ba là một hình ảnh đạn được truyền vào dưới dạng một con trỏ hình ảnh. Trong trường hợp này, giá trị được truyền là NULL
+				Bullet* bullet = new Bullet(getCollision().x + PLAYER_WIDTH * 1.25, getCollision().y, NULL);
+				
+				//âm thanh bắn súng.
+				/*
+				Tham số đầu tiên là một số nguyên đại diện cho kênh âm thanh sẽ được sử dụng (-1 là kênh mặc định).
+				Tham số thứ hai là con trỏ tới âm thanh bắn súng.
+				Tham số thứ ba là mức độ lặp lại của âm thanh.
+				*/
 				Mix_PlayChannel(-1, p_sfx[shootSFX], 0);
+				// đặt kiểu lật của đạn bằng kiểu lật của lớp người chơi (getFlipType()).
 				bullet->setFlipType(getFlipType());
+				//câu lệnh đặt kích thước và vị trí cho đạn.
 				bullet->setWidthHeight(DEFAULTBULLET_W, DEFAULTBULLET_H, getX());
-				bullet->setType(Bullet::NORMAL);
+				bullet->setType(Bullet::NORMAL);//đặt loại đạn
+				bullet->setMove(true);// đặt thuộc tính "move" của đối tượng viên đạn là "true", cho phép viên đạn di chuyển trên màn hình.
+				bulletList.push_back(bullet);//xử lý việc cập nhật vị trí của các viên đạn và xóa chúng khi chúng chạm vào các vật cản hoặc ra khỏi màn hình.
 			}
-			bullet->setMove(true);
-			bulletList.push_back(bullet);
+			
 		}
 		else if (events.type == SDL_MOUSEBUTTONUP && events.key.repeat == 0) {
+
 		}
 	}
 }
@@ -111,6 +130,7 @@ void Player::handleInputActive(SDL_Event &events, Mix_Chunk* p_sfx[]) {
 void Player::update(vector<LevelPart>& LevelPartList, vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect& camera) {
 	gravity();
 	if(!dead) getHit(monsterList, p_sfx, camera);
+
 	// set trạng thái Player
 	if (xVel == 0 && grounded && !dead) idling = true;
 	else idling = false;
@@ -133,27 +153,34 @@ void Player::update(vector<LevelPart>& LevelPartList, vector<Monster*> &monsterL
 	//lesson 26
 	//hàm này di chuyển nhân vật theo trục x và y nếu nhân vật chưa chết.
 	//Nó kiểm tra xem nhân vật có chạm tường hay không và điều chỉnh vị trí của nhân vật nếu cần.
-	
 	//move x
 	if (!dead) {
-		xPos += xVel;
+		xPos += 1.1*xVel;//xem lai
 		collision.x = getX() + PLAYER_WIDTH;
 
 
 		//nhân vật đã đi quá màn hình sang trái, nó sẽ được đặt lại về vị trí ban đầu
 		// và giới hạn di chuyển của nhân vật sẽ được giữ nguyên.
 		if (getX() + PLAYER_WIDTH < 0) {
-			//won = true;
 			xPos = -PLAYER_WIDTH;
 			collision.x = getX() + PLAYER_WIDTH;
+		}
+
+		//kiểm tra nv có va chạm với các tường trong danh sách LevelPartList
+		if (commonFunc::touchesWood(collision, LevelPartList)) {
+			xPos -= 1.1*xVel;//xem lai
+			collision.x = getX() + PLAYER_WIDTH;
+			//va chạm, vị trí của nhân vật sẽ được điều chỉnh để ngăn không cho nhân vật đi xuyên qua các tường.
+			//va chạm với các tường, biến collision.x được cập nhật với vị trí mới của nhân vật theo trục x để kiểm tra va chạm với tường trong lần cập nhật kế tiếp
 		}
 	}
 
 	//move y
-	yPos += yVel;
+	yPos += yVel;//xem lai
 	collision.y = getY() + PLAYER_HEIGHT;
+	//kiểm tra va chạm với cạnh trên của màn hình
 	if (getY() + PLAYER_HEIGHT < 0) {
-		yPos = -PLAYER_HEIGHT;
+		yPos = -PLAYER_HEIGHT*0.5;//xem lai
 		collision.y = getY() + PLAYER_HEIGHT;
 	}
 
@@ -169,18 +196,20 @@ void Player::update(vector<LevelPart>& LevelPartList, vector<Monster*> &monsterL
 				Mix_PlayChannel(-1, p_sfx[landSFX], 0);
 			}
 		}
-		else if (yVel < 0) {//dang nhay len
-			yPos -= yVel;
-			yVel = 0;//dung viec nhay
+		//nếu đang nhảy lên
+		else if (yVel < 0) {
+			//đặt lại vị trí y của Player để nằm trên bức tường hoặc đất
+			yPos -= yVel;//xem lai
+			yVel = 0;//dừng việc nhảy
 		}
 		collision.y = getY() + PLAYER_HEIGHT;
 	}
-	else grounded = false;//xem lai
 }
+
 
 void Player::jump() {
 	if (grounded) {//đang đứng trên mặt đất
-		yVel -= 10;// tốc độ theo trục y của nhân vật: nếu yval < 0 thì làm cho nhân vật nhảy cao hơn: những lần nhảy liên tiếp
+		yVel -= 11;// tốc độ theo trục y của nhân vật: nếu yval < 0 thì làm cho nhân vật nhảy cao hơn: những lần nhảy liên tiếp
 		grounded = false;//nv k ở trên mặt đất = đang nhảy
 	}
 }
@@ -203,6 +232,7 @@ void Player::handleCamera(SDL_Rect& camera, float& camVel) {
 	// nếu camVel đã vượt quá một mức độ nhất định, tốc độ tăng sẽ giảm dần (acc giảm dần).	
 	if (camVel > 4) acc = 0.0003;
 	if (camVel > 5) acc = 0.00001;
+
 	camVel += acc;
 /*giới hạn di chuyển camera: Camera sẽ không di chuyển quá giới hạn màn hình chơi.
 nếu người chơi đến gần phía bên phải màn hình (từ đầu màn hình tới 2/3 chiều rộng của màn hình)
@@ -230,17 +260,29 @@ camera sẽ dừng di chuyển trên trục x và chỉ di chuyển theo trục 
 
 void Player::getHit(vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect& camera) {
 	for (int i = 0; i < monsterList.size(); i++) {
-		if(monsterList.at(i) != NULL)
+		if(monsterList.at(i) != NULL) {
 			if ((monsterList.at(i)->getDistance() <= TILE_WIDTH * 1.5 && monsterList.at(i)->isAttacking() && getY() >= monsterList.at(i)->getY() - TILE_WIDTH && getY() <= monsterList.at(i)->getY() + TILE_WIDTH * 0.5)) {
-				dead = true;
-				Mix_PlayChannel(-1, p_sfx[hitSFX], 0);
+				maxHP--;		
+				yVel--;
+				break;
 			}
+			cerr << maxHP << endl;
+		}
 	}
-	if (getY() + PLAYER_HEIGHT >= LEVEL_HEIGHT || getX() - camera.x < 192 - 2*64) {
+	/*
+	nếu Player đang ở trên màn hình và chạm đáy màn hình hoặc đi quá xa về bên trái (vượt quá giới hạn của camera), 
+	Player cũng sẽ chết và phát âm thanh hitSFX.
+	*/
+	if (getY() + PLAYER_HEIGHT >= LEVEL_HEIGHT || getX() - camera.x <= 192 - 2*64) {
+		maxHP -= 10;
+	}
+
+	if (maxHP <= 0) {
 		dead = true;
 		Mix_PlayChannel(-1, p_sfx[hitSFX], 0);
 	}
 }
+
 void Player::knockBack() {
 	if (beingHit && beingHitFrame == 0) {//da bi tan cong
 		yVel -= 4;
@@ -287,6 +329,7 @@ void Player::render(SDL_Rect &p_camera) {
 		if (fallingFrame / 4 >= FALLING_ANIMATION_FRAMES) fallingFrame = 0;
 	}
 	else fallingFrame = 0;
+	
 	if (beingHit) {
 		commonFunc::renderAnimation(tex, xPos, yPos, idlingClips[idleFrame/6], p_camera, 0, NULL, getFlipType());
 		beingHitFrame++;

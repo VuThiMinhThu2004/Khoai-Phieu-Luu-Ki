@@ -1,44 +1,42 @@
 ﻿#include <iostream>
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
+#include <ctime>
+#include <cstdlib>
 
 #include "RenderWindow.h"
-#include "Entity.h"
-#include "Player.h"
-#include "Monster.h"
-#include "Timer.h"
-#include "Tile.h"
 #include "Game.h"
 
 using namespace std;
 
-SDL_Event event;
-
-Game gameMain;
-
-
 int main(int argc, char* argv[]) {
-    
+    Game mainGame;
     srand(time(NULL));
-
-    if (!gameMain.init()) return 0;
+    if (!mainGame.init()) return 0;
     else {
-        if (!gameMain.loadMedia()) cout << "FAILED TO LOAD MEDIA!" << endl;
+        if (!mainGame.loadMedia()) return 0;
         else {
-            if (!gameMain.createPlayer() || !gameMain.createMonster()) {
-                cout << "FAILED TO LOAD TILE SET!" << endl;
+            if (!mainGame.createMap() || !mainGame.createLevel() || !mainGame.createMenu() || !mainGame.createPlayer() || !mainGame.createMonster()) {
+                cout << "FAILED TO CREATE GAME ELEMENTS!" << endl;
                 return 0;
             }
-            gameMain.start_BredatorySFX();
+            mainGame.start_BredatorySFX();
             
-            while (gameMain.isRunning()) {
+            while (mainGame.isRunning()) {
                 SDL_Event event;
-                while (SDL_PollEvent(&event)) gameMain.handleGameInput(event);
-                
-                gameMain.playMusic();
-                gameMain.render_update_Game();
-           }
+                while (SDL_PollEvent(&event)) mainGame.handleGameInput(event);
+                if (mainGame.getMenuList().at(0).isMenu()) mainGame.render_mainMenu();
+                else if (mainGame.getMenuList().at(0).isPaused()) mainGame.pauseMusicTime();
+                else {
+                    mainGame.playMusic();
+                    mainGame.render_update_Game();
+                }
+            }
         }
     }
-    gameMain.destroy();
+    mainGame.destroy();
     commonFunc::cleanUp();
     return 0;
 }

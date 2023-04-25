@@ -10,7 +10,7 @@ using namespace std;
 const int DEFAULTBULLET_W = 64;
 const int DEFAULTBULLET_H = 64;
 
-const int BULLETSPEED = 3;
+const float BULLETSPEED = 2.5;
 
 class Bullet : public Entity {
 private:
