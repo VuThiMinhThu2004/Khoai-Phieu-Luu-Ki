@@ -38,8 +38,7 @@
 
   Người chơi có lượng máu tối đa là 100 và sẽ chết khi lượng máu trở về 0. Tốc độ di chuyển và sát thương của người chơi cao hơn quái vật
 
-  Tiêu diệt một con quái vật sẽ được thêm 1 điểm
-  
+
 
 <a name = "chuc-nang"/>
 
