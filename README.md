@@ -21,7 +21,7 @@
   Cách 1: Trên Github, chọn Code => Download ZIP  
   Cách 2: Mở terminal tại thư mục muốn lưu project, sử dụng lệnh `git init` để khởi tạo Git, sau đó dùng lệnh `git clone https://github.com/VuThiMinhThu2004/Khoai-Phieu-Luu-Ki.git` để clone project về máy  
   ### B2: Cài đặt Make
-  Tải và cài đặt Mingw32 
+  Tải và cài đặt Mingw32. 
   Thêm đường dẫn đến thư mục bin vào `environment variable`  
   ### B3: Chạy game
   Mở terminal tại thư mục chứa project, sử dụng lệnh `mingw32-make` và `.\main` để chạy game
