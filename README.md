@@ -43,7 +43,7 @@
 <a name = "chuc-nang"/>
 
 ### III, Các chức năng của trò chơi
-  - Điều khiển nhân vật di chuyển bằng các phím `a`, `d`, `w` và tấn công bằng chuột
+  - Điều khiển nhân vật di chuyển bằng các phím `a`, `d`, `w` và tấn công bằng `chuột`
   - Hệ thống HP, đánh quái và quái tự tấn công người chơi
   - Quái vật tự đuổi theo người chơi khi vào phạm vi và tấn công
   - Chèn âm thanh vào mỗi lần click chuột(để bắn), thêm thời gian, điểm số vào game 
