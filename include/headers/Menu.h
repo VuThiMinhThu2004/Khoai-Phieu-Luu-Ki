@@ -25,8 +25,8 @@ private:
 	SDL_Rect exitButtonClips[TYPE_OF_BUTTON];
 	SDL_Rect retryButtonClips[TYPE_OF_BUTTON];
 
-	SDL_Point button1 = { SCREEN_WIDTH/2 - BUTTON_WIDTH/2, SCREEN_HEIGHT/2 };
-	SDL_Point button2 = { SCREEN_WIDTH / 2 - BUTTON_WIDTH / 2, SCREEN_HEIGHT/2 + BUTTON_HEIGHT + 20 };
+	SDL_Point button1 = { 64*6, 64*6 };
+	SDL_Point button2 = { 64*6, 64*7 };
 
 	bool menu = true;
 	bool retry = false;

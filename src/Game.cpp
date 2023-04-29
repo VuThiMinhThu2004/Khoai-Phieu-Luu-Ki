@@ -31,7 +31,7 @@ bool Game::init() {//lazyfoo
         success = false;
     }
 
-    if (success == true) commonFunc::renderWindow("KHOAI PHIEU LUU", SCREEN_WIDTH, SCREEN_HEIGHT);
+    if (success == true) commonFunc::renderWindow("KHOAI PHIEU LUU KI", SCREEN_WIDTH, SCREEN_HEIGHT);
 
     return success;
 }
