@@ -26,7 +26,7 @@ class Heart : public Entity {
 
         //int mPosX, mPosY; entity
         //The velocity of the dot
-        float xVel = 0, yVel = 0;
+        int xVel = 0, yVel = 0;
         float distanceToPlayer;
         SDL_Rect collision;
 
@@ -39,7 +39,7 @@ class Heart : public Entity {
         
 
         //Initializes the variables
-        Heart(float p_x, float p_y, SDL_Texture* p_tex);
+        Heart(int p_x, int p_y, SDL_Texture* p_tex);
 
         //Takes key presses and adjusts the dot's velocity
         void update(Player& p_player, vector<LevelPart>& LevelPartList, Mix_Chunk* p_sfx[], SDL_Rect& camera);

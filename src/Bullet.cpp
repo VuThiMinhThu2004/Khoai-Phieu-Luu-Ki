@@ -1,7 +1,7 @@
 #include "Bullet.h"
 
 //Tạo một đối tượng đạn mới với vị trí ban đầu p_x, p_y và hình ảnh được sử dụng để vẽ đạn là p_tex
-Bullet::Bullet(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
+Bullet::Bullet(int p_x, int p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
 	collision.x = xPos;
 	collision.y = yPos;
 

@@ -59,7 +59,7 @@ private:
 
 	bool won = false;
 public:
-	Player(float p_x, float p_y, SDL_Texture* p_tex);//khởi tạo player với tọa đồ và hình ảnh tương ứng
+	Player(int p_x, int p_y, SDL_Texture* p_tex);//khởi tạo player với tọa đồ và hình ảnh tương ứng
 	
 	int maxHP = 100;
 

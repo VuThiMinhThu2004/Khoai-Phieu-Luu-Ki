@@ -2,7 +2,7 @@
 #include <cmath>
 
 //lesson14
-Monster::Monster(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
+Monster::Monster(int p_x, int p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
 	collision.x = getX() + MONSTER_WIDTH;
 	collision.y = getY() +  MONSTER_HEIGHT;
 	collision.w =  MONSTER_WIDTH - 12;

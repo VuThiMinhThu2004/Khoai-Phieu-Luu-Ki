@@ -17,7 +17,7 @@ private:
 	bool moving = false;
 	int bulletType;
 	SDL_Rect collision;
-	float xVel = 7;
+	int xVel = 7;
 	
 	static const int BULLET_ANIMATION_FRAMES = 6;
 	SDL_Rect bulletClips[BULLET_ANIMATION_FRAMES];
@@ -29,7 +29,7 @@ public:
 		NONE = 0,
 		NORMAL = 1,
 	};
-	Bullet(float p_x, float p_y, SDL_Texture* p_tex);
+	Bullet(int p_x, int p_y, SDL_Texture* p_tex);
 
 	void update(vector<LevelPart>& LevelPartList);
 	void render(SDL_Rect& camera, SDL_Texture* p_tex);

@@ -21,7 +21,7 @@
   Cách 1: Trên Github, chọn Code => Download ZIP  
   Cách 2: Mở terminal tại thư mục muốn lưu project, sử dụng lệnh `git init` để khởi tạo Git, sau đó dùng lệnh `git clone https://github.com/VuThiMinhThu2004/Khoai-Phieu-Luu-Ki.git` để clone project về máy  
   ### B2: Cài đặt Make
-  Tải và cài đặt Mingw32 
+  Tải và cài đặt Mingw32
   Thêm đường dẫn đến thư mục bin vào `environment variable`  
   ### B3: Chạy game
   Mở terminal tại thư mục chứa project, sử dụng lệnh `mingw32-make` và `.\main` để chạy game
@@ -37,8 +37,6 @@
   Người chơi hoá thân vào nhân vật trong game, di chuyển trên bản đồ và tấn công quái vật để kiếm số điểm cao nhất
 
   Người chơi có lượng máu tối đa là 100 và sẽ chết khi lượng máu trở về 0. Tốc độ di chuyển và sát thương của người chơi cao hơn quái vật
-
-  Tiêu diệt một con quái vật sẽ được thêm 1 điểm
   
 
 <a name = "chuc-nang"/>

@@ -1,7 +1,7 @@
 #include "Entity.h"
 
 // Hàm khởi tạo các biến x, y, tex và currentFrame
-Entity::Entity(float p_x, float p_y, SDL_Texture* p_tex) 
+Entity::Entity(int p_x, int p_y, SDL_Texture* p_tex) 
 		: xPos(p_x), yPos(p_y), tex(p_tex)
 {
 	currentFrame.x = 0;
@@ -11,11 +11,11 @@ Entity::Entity(float p_x, float p_y, SDL_Texture* p_tex)
 	SDL_QueryTexture(p_tex, NULL, NULL, &currentFrame.w, &currentFrame.h);
 }
 
-float Entity::getX() {
+int Entity::getX() {
 	return xPos;
 }
 
-float Entity::getY() {
+int Entity::getY() {
 	return yPos;
 }
 

@@ -19,8 +19,8 @@ const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
 //level
-const int LEVEL_WIDTH = 1344;
-const int LEVEL_HEIGHT = 1024;
+const int LEVEL_WIDTH = 1344;//21tile
+const int LEVEL_HEIGHT = 1024;//16tile
 
 //tile
 const int TILE_WIDTH = 64;
@@ -42,8 +42,8 @@ static SDL_Surface* surface = NULL;
 
 struct path_pos {
 	const char* path;
-	vector<float> monsterPos;
-	path_pos(vector<float> p_monsterPos, const char* p_path) {
+	vector<int> monsterPos;
+	path_pos(vector<int> p_monsterPos, const char* p_path) {
 		path = p_path;
 		monsterPos =  p_monsterPos;
 	}
@@ -57,10 +57,10 @@ namespace commonFunc {
 	//Texture: lazyfoo
 	SDL_Texture* loadTexture(const char* p_filePath);
 	void renderTexture(Entity& entity, SDL_Rect *rec = NULL, SDL_Rect *camera = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
-	void renderTexture(SDL_Texture* p_tex, float p_x, float p_y, float p_w = 0, float p_h = 0, SDL_Rect* rec = NULL, SDL_Rect* camera = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void renderTexture(SDL_Texture* p_tex, int p_x, int p_y, int p_w = 0, int p_h = 0, SDL_Rect* rec = NULL, SDL_Rect* camera = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 	void renderTile(Entity& entity, SDL_Rect& rec, SDL_Rect& camera);
 	void renderPlayer(Entity& entity, SDL_Rect& camera);
-	void renderAnimation(SDL_Texture* p_tex, float p_x, float p_y, SDL_Rect& p_clip, SDL_Rect& p_camera, double p_angle = 0.0, SDL_Point* p_center = NULL, SDL_RendererFlip p_flip = SDL_FLIP_NONE);
+	void renderAnimation(SDL_Texture* p_tex, int p_x, int p_y, SDL_Rect& p_clip, SDL_Rect& p_camera, double p_angle = 0.0, SDL_Point* p_center = NULL, SDL_RendererFlip p_flip = SDL_FLIP_NONE);
 
 	//lesson 27: Collision boxes are a standard way to check collision between two objects
 	//ls28: per-pixer-collision-detection

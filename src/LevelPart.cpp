@@ -1,6 +1,6 @@
 #include "LevelPart.h"
 
-LevelPart::LevelPart(float p_x, float p_y, const char* p_path, SDL_Texture* p_tileTex)
+LevelPart::LevelPart(int p_x, int p_y, const char* p_path, SDL_Texture* p_tileTex)
     :x(p_x), y(p_y)
 {
     //Success flag
@@ -81,7 +81,7 @@ void LevelPart::setLevelX(LevelPart& p_level) {
     }
 }
 
-void LevelPart::setLevelX(float p_x) {
+void LevelPart::setLevelX(int p_x) {
     x = p_x;
     for (int i = 0; i < tilesList.size(); i++) {
         int row = i / 21;

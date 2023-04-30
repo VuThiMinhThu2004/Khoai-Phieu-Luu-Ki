@@ -55,7 +55,7 @@ void commonFunc::renderTexture(Entity& entity, SDL_Rect *rec, SDL_Rect *camera, 
 Vẽ texture lên renderer theo tọa độ x,y, kích thước p_w,p_h, hình dạng được 
 chỉ định bởi rec, camera, góc xoay angle, trục quay center, và flip.
 */
-void commonFunc::renderTexture(SDL_Texture* p_tex, float p_x, float p_y, float p_w, float p_h, SDL_Rect* rec, SDL_Rect* camera, double angle, SDL_Point* center, SDL_RendererFlip flip) {
+void commonFunc::renderTexture(SDL_Texture* p_tex, int p_x, int p_y, int p_w, int p_h, SDL_Rect* rec, SDL_Rect* camera, double angle, SDL_Point* center, SDL_RendererFlip flip) {
 	//mặc định là in toàn bộ texture ra
 	SDL_Rect dst = { p_x, p_y, p_w, p_h };
 
@@ -81,7 +81,7 @@ void commonFunc::renderTile(Entity& entity, SDL_Rect& rec, SDL_Rect& camera) {
 
 
 //vẽ animation lên renderer theo tọa độ x,y, hình dạng animation được chỉ định bởi p_clip, camera, góc xoay angle, trục quay center, và flip.
-void commonFunc::renderAnimation(SDL_Texture* p_tex, float p_x, float p_y, SDL_Rect &p_clip, SDL_Rect &p_camera, double p_angle, SDL_Point* p_center, SDL_RendererFlip p_flip) {
+void commonFunc::renderAnimation(SDL_Texture* p_tex, int p_x, int p_y, SDL_Rect &p_clip, SDL_Rect &p_camera, double p_angle, SDL_Point* p_center, SDL_RendererFlip p_flip) {
    	SDL_Rect src = { p_clip.x, p_clip.y, p_clip.w, p_clip.h };
 	SDL_Rect dst = { p_x - p_camera.x, p_y - p_camera.y, p_clip.w, p_clip.h};
 	
@@ -93,7 +93,7 @@ void commonFunc::renderAnimation(SDL_Texture* p_tex, float p_x, float p_y, SDL_R
 //vẽ Player lên renderer theo vị trí của entity và camera.
 void commonFunc::renderPlayer(Entity& entity, SDL_Rect &camera) {
 	SDL_Rect src = { 0, 0, entity.getFrame().w, entity.getFrame().h };
-	SDL_Rect dst = { float (entity.getX() - camera.x), float(entity.getY() - camera.y),float(entity.getFrame().w), float(entity.getFrame().h) };
+	SDL_Rect dst = { int (entity.getX() - camera.x), int(entity.getY() - camera.y),int(entity.getFrame().w), int(entity.getFrame().h) };
 	SDL_RenderCopy(renderer, entity.getTex(), &src, &dst);
 }
 

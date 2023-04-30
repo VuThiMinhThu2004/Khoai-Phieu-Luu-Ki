@@ -139,9 +139,9 @@ Nó sử dụng hàm createText() trong commonFunc để tạo một SDL_Texture
  đại diện cho số FPS. Sau đó, nó tạo một đối tượng Entity với vị trí và SDL_Texture được tạo ở trên, 
  và sau đó gọi hàm renderTexture() trong commonFunc để hiển thị đối tượng Entity trên màn hình.
 */
-    SDL_Color whiteColor = { 255,255,255,255 };
-    SDL_Texture* textTex = commonFunc::createText(timeText.str().c_str(), whiteColor);
-    Entity text(64*3, 0, textTex);
+    SDL_Color yellowColor = { 252,226,5,255 };
+    SDL_Texture* textTex = commonFunc::createText(timeText.str().c_str(), yellowColor);
+    Entity text(64*18, 0, textTex);
     commonFunc::renderTexture(text);
     ++countedFrames;//biến đếm tần số được tăng lên để chu kỳ tính FPS tiếp theo có thể bắt đầu./tang bo dem khung
 }
@@ -161,7 +161,6 @@ void Game::renderScore() {
     if (score < playerList.at(0).getX() / TILE_WIDTH) score = playerList.at(0).getX() / TILE_WIDTH;
     scoreText.str("");
     scoreText << "Score: " << score << "m";//ds htai
-    SDL_Color whiteColor = { 255,255,255,255 };
     SDL_Color yellowColor = { 252,226,5,255 };
 
 ////kiểm tra xem điểm số hiện tại có lớn hơn điểm số cao nhất đã lưu trữ bằng cách đọc từ tệp tin "res/highscore.txt"
@@ -175,11 +174,11 @@ void Game::renderScore() {
 
 //tạo ra hai đối tượng SDL_Texture cho điểm số và điểm số cao nhất bằng cách sử dụng hàm createText từ không gian tên commonFunc
     SDL_Texture* scoreTex = commonFunc::createText(scoreText.str().c_str(), yellowColor);
-    SDL_Texture* highscoreTex = commonFunc::createText(highscoreText.str().c_str(), whiteColor);
+    SDL_Texture* highscoreTex = commonFunc::createText(highscoreText.str().c_str(), yellowColor);
 
 //hai đối tượng Entity được tạo ra sử dụng các đối tượng texture cho điểm số và điểm số cao nhất và vị trí của chúng được đặt trên màn hình. 
-    Entity current_score(1100, 30, scoreTex);
-    Entity high_score(1100, 0, highscoreTex);
+    Entity current_score(64*3, 30, scoreTex);
+    Entity high_score(64*3, 0, highscoreTex);
 
 //renderTexture để vẽ cả hai đối tượng Entity điểm số và điểm số cao nhất lên màn hình.
     commonFunc::renderTexture(current_score);

@@ -52,7 +52,7 @@ private:
 	
 public:
 
-	Monster(float p_x, float p_y, SDL_Texture* p_tex);
+	Monster(int p_x, int p_y, SDL_Texture* p_tex);
 
 	//ls27+28
 	void update(Player& p_player, vector<LevelPart>& LevelPartList, Mix_Chunk* p_sfx[], SDL_Rect& camera);

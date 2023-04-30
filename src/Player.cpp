@@ -1,7 +1,7 @@
 ﻿#include "Player.h"
 
 //lesson 14
-Player::Player(float p_x, float p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
+Player::Player(int p_x, int p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
 	
 	//khởi tạo tọa độ, texture và collision của Player, cũng như các frame cho animation.
 	
