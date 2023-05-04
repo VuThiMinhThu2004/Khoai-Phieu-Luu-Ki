@@ -16,8 +16,8 @@ public:
 	void pause();
 	void unpause();
 
-	//Gets the timer's time: để tính toán thời gian giữa các frame hoặc đo lường thời gian xử lý của một hoạt động nhất định trong trò chơi hoặc ứng dụng.
-	Uint32 getTicks();//trả về số mili giây đã trôi qua từ lần gọi hàm start() của đối tượng LTimer.
+	//Gets the timer's time
+	Uint32 getTicks();//trả về số ms đã trôi qua từ lần gọi hàm start() của đối tượng LTimer.
 
 	//Checks the status of the timer
 	bool isStarted();

@@ -72,7 +72,7 @@ public:
 	bool loadMedia();
 	void FPSCounter();
 	void HpCounter();
-	void renderScore();//hiển thị điểm số trên màn hình.
+	void renderScore();
 
 	bool createMap();
 	bool createLevel();
@@ -83,7 +83,7 @@ public:
 
 	void start_BredatorySFX();
 	void playMusic();
-	void pauseMusicTime();//dừng phát nhạc khi trò chơi tạm dừng
+	void pauseMusicTime();
 	
 	void render_update_LevelPart();
 	void render_update_bullet();

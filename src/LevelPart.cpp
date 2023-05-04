@@ -9,10 +9,8 @@ LevelPart::LevelPart(int p_x, int p_y, const char* p_path, SDL_Texture* p_tileTe
     //The tile offsets
     int x = getX(), y = getY();
 
-    //Mở map
     ifstream map(p_path);
 
-    //Nếu ko đọc đc dữ liệu trong map
     if (map.fail()) {
         printf("Unable to load map file!\n");
         tilesLoaded = false;
@@ -24,7 +22,6 @@ LevelPart::LevelPart(int p_x, int p_y, const char* p_path, SDL_Texture* p_tileTe
             //Chọn loại cho tile
             int tileType = -1;
 
-            //Đọc từ map
             map >> tileType;
 
             //Debug
@@ -34,7 +31,6 @@ LevelPart::LevelPart(int p_x, int p_y, const char* p_path, SDL_Texture* p_tileTe
                 break;
             }
 
-            //Nếu như đọc đc tileType và thỏa mãn
             if ((tileType >= 0) && (tileType < TOTAL_TILE_SPRITES)) {
                 Tile* tile = new Tile(x, y, p_tileTex, tileType);
                 tilesList.push_back(tile);

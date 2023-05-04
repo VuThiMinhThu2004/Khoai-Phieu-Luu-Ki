@@ -21,7 +21,7 @@
   Cách 1: Trên Github, chọn Code => Download ZIP  
   Cách 2: Mở terminal tại thư mục muốn lưu project, sử dụng lệnh `git init` để khởi tạo Git, sau đó dùng lệnh `git clone https://github.com/VuThiMinhThu2004/Khoai-Phieu-Luu-Ki.git` để clone project về máy  
   ### B2: Cài đặt Make
-  Tải và cài đặt Mingw32
+  Tải và cài đặt Mingw32. 
   Thêm đường dẫn đến thư mục bin vào `environment variable`  
   ### B3: Chạy game
   Mở terminal tại thư mục chứa project, sử dụng lệnh `mingw32-make` và `.\main` để chạy game
@@ -31,18 +31,19 @@
 ## II, Mô tả chung về trò chơi
   **Thể loại:** `Sinh tồn`, `phiêu lưu`
   
-  [Video minh hoạ](https://youtu.be/LZU_LU0rsYk)
+  [Video minh hoạ](https://youtu.be/5wZWLHtU8rk)
   Game sinh tồn, phiêu lưu trong thế giới 2D có thể di chuyển đánh quái.
 
   Người chơi hoá thân vào nhân vật trong game, di chuyển trên bản đồ và tấn công quái vật để kiếm số điểm cao nhất
 
   Người chơi có lượng máu tối đa là 100 và sẽ chết khi lượng máu trở về 0. Tốc độ di chuyển và sát thương của người chơi cao hơn quái vật
-  
+
+
 
 <a name = "chuc-nang"/>
 
 ### III, Các chức năng của trò chơi
-  - Điều khiển nhân vật di chuyển bằng các phím `a`, `d`, `w` và tấn công bằng chuột
+  - Điều khiển nhân vật di chuyển bằng các phím `a`, `d`, `w` và tấn công bằng `chuột`
   - Hệ thống HP, đánh quái và quái tự tấn công người chơi
   - Quái vật tự đuổi theo người chơi khi vào phạm vi và tấn công
   - Chèn âm thanh vào mỗi lần click chuột(để bắn), thêm thời gian, điểm số vào game 
@@ -78,10 +79,15 @@
     
  ### VII, Tham khảo
   - [Hướng dẫn](https://lazyfoo.net/tutorials/SDL/)
-  - [Hướng dẫn 2](https://youtube.com/playlist?list=PLUFd3gYWwiYFdSoqZp35RU6mja4N5u4dz)
-  - [Hướng dẫn 3](https://youtube.com/playlist?list=PLZd7ojlRK0bwrL8060OGurG_kaeJc_QOH)
-  - [Hướng dẫn 4](https://www.youtube.com/watch?v=QQzAHcojEKg&list=PLhfAbcv9cehhkG7ZQK0nfIGJC_C-wSLrx)
+  - [Hướng dẫn](https://youtube.com/playlist?list=PL2RPjWnJduNmXHRYwdtublIPdlqocBoLS)
+  - [Hướng dẫn](https://youtube.com/playlist?list=PLUFd3gYWwiYFdSoqZp35RU6mja4N5u4dz)
+  - [Hướng dẫn](https://youtube.com/playlist?list=PLHJE4y54mpC5_eEz9gCqIkNpU-n_2eyNt)
+  - [Hướng dẫn](https://youtube.com/playlist?list=PLZd7ojlRK0bwrL8060OGurG_kaeJc_QOH)
+  - [Hướng dẫn](https://www.youtube.com/watch?v=QQzAHcojEKg&list=PLhfAbcv9cehhkG7ZQK0nfIGJC_C-wSLrx)
+  - [Hướng dẫn](https://www.youtube.com/watch?v=QQzAHcojEKg&list=PLhfAbcv9cehhkG7ZQK0nfIGJC_C-wSLrx)  
+  - [Hướng dẫn](https://youtube.com/playlist?list=PLR7NDiX0QsfTIEQUeYCfc2MyCquX0ig9V)
   - [Đồ hoạ (Tự thiết kế và có lấy ý tưởng đồ họa từ)](https://www.youtube.com/watch?v=k0vZShmhG74)
+  - [Lấy ý tưởng game](https://www.youtube.com/watch?v=ugKKk7bE6nQ&list=PL-K0viiuJ2RctP5nlJlqmHGeh66-GOZR_&index=36)
   - [Làm map](https://www.youtube.com/watch?v=5f-g87aGbBc)
     
 [về đầu trang](#ve-dau-trang)

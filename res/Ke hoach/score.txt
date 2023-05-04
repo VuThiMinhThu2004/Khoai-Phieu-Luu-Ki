@@ -1,0 +1,4 @@
+- Ý tưởng tính Score:
+    Tính điểm: là số ô mà nhân vật đi được
+      
+    Cách xử lý: lấy xPos của nhân vật tại thời điểm hiện tại chia cho/ kích thước của 1 tile theo chiều rộng: score = playerList.at(0).getX() / TILE_WIDTH;

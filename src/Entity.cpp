@@ -1,6 +1,5 @@
 #include "Entity.h"
 
-// Hàm khởi tạo các biến x, y, tex và currentFrame
 Entity::Entity(int p_x, int p_y, SDL_Texture* p_tex) 
 		: xPos(p_x), yPos(p_y), tex(p_tex)
 {

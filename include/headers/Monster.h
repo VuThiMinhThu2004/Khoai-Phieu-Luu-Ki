@@ -9,7 +9,8 @@
 using namespace std;
 
 class Player;
-//copy tu player sang
+
+
 class Monster : public Entity {
 private:
 	const int MONSTER_WIDTH = 64;
@@ -44,7 +45,7 @@ private:
 
 	float xVel = 0, yVel = 0;
 	int maxHealth = 3;
-	int groundSTT = 1; //số thứ tự của block đang đứng trên
+	int groundSTT = 1; 
 	int levelSTT = 1;
 
 	float distanceToPlayer;
@@ -54,7 +55,7 @@ public:
 
 	Monster(int p_x, int p_y, SDL_Texture* p_tex);
 
-	//ls27+28
+	//lesson27+28
 	void update(Player& p_player, vector<LevelPart>& LevelPartList, Mix_Chunk* p_sfx[], SDL_Rect& camera);
 	
 	void gravity();
@@ -69,12 +70,6 @@ public:
 	void render(SDL_Rect& p_camera);
 
 	SDL_Rect getCollision() const { return collision; }
-	float getDistance() { return distanceToPlayer; }
+	float getDistance() { return distanceToPlayer; }//ls29
 };
 
-/*
-y tuong: Hàm "moveToPlayer" được sử dụng để di chuyển đối tượng Monster đến vị trí của người chơi trong game. 
-Hàm này nhận đối số là một đối tượng người chơi và một vector chứa danh sách các phần của màn chơi. 
-Đối tượng Monster sẽ tính toán khoảng cách từ chính nó đến người chơi và di chuyển đến vị trí của người chơi 
-nếu khoảng cách đó nhỏ hơn một ngưỡng nhất định.
-*/

@@ -12,15 +12,16 @@
 #include "Tile.h"
 
 using namespace std;
-//ls 31
+//lesson 31
 
 class Tile;
 
 class LevelPart {
 private:
 	int x, y;
-	vector<Tile*> tilesList;//danh sách các Tile trong LevelPart.
-	vector<int> monsterPos;//danh sách vị trí 
+	vector<Tile*> tilesList;
+	vector<int> monsterPos;
+	 
 public:
 	LevelPart(int p_x, int p_y, const char* p_path, SDL_Texture* p_tileTex);
 	void render(SDL_Rect p_TileClips[], SDL_Rect& p_camera);

@@ -22,7 +22,7 @@ private:
 	static const int BULLET_ANIMATION_FRAMES = 6;
 	SDL_Rect bulletClips[BULLET_ANIMATION_FRAMES];
 	int bulletFrame = 0;
-	const int delay = 5;//tính thời gian trễ giữa các frame trong animation.
+	const int delay = 5;
 
 public:
 	enum bulletType {

@@ -11,29 +11,28 @@ using namespace std;
 class LevelPart;
 class Tile;
 
-const float GRAVITY = 0.35;//lực hấp dẫn
+const float GRAVITY = 0.35;
 const float MAX_GRAVITY = 15;
 
 //screen
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
-//level
-const int LEVEL_WIDTH = 1344;//21tile
-const int LEVEL_HEIGHT = 1024;//16tile
+//level: 21x16
+const int LEVEL_WIDTH = 1344;
+const int LEVEL_HEIGHT = 1024;
 
 //tile
 const int TILE_WIDTH = 64;
 const int TILE_HEIGHT = 64;
 
 
-//các hằng số liên quan đến số lượng các phần, bản đồ và sprite trong mức chơi.
 const int TOTAL_TILES = 336;
 const int TOTAL_TILE_SPRITES = 187;
 const int TOTAL_LEVEL_PART = 3;
-const int TOTAL_MAP = 5;//xem lai
+const int TOTAL_MAP = 5;
 
-//các con trỏ tĩnh đến font, cửa sổ, trình kết xuất và bề mặt của SDL.
+
 static TTF_Font* font = NULL;
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
@@ -49,7 +48,6 @@ struct path_pos {
 	}
 };
 
-//tải và hiển thị texture, tạo văn bản, kiểm tra va chạm và các hàm khác.
 namespace commonFunc {
 	//Window
 	void renderWindow(const char* p_title, int p_width, int p_height);

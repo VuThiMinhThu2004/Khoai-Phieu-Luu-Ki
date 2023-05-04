@@ -205,12 +205,10 @@ bool Game::createMap() {
 
 bool Game::createLevel() {
 
-//một số ngẫu nhiên được tạo để chọn một bản đồ từ vector mapList.
     for (int i = 0; i < TOTAL_LEVEL_PART; i++) {
         int random = rand() % (TOTAL_MAP - 1);
-        if (i == 0) random = TOTAL_MAP - 1;//bản đồ cuối cùng trong vector (tức bản đồ spawn) sẽ được chọn thay vì một bản đồ ngẫu nhiên.
+        if (i == 0) random = TOTAL_MAP - 1;//chọn swammap(không lấy ngẫu nhiên)
 
-// x được đặt là i * LEVEL_WIDTH, tọa độ y được đặt là 0, đường dẫn đến tệp bản đồ được đặt là đường dẫn của bản đồ được chọn, và texture cho các ô đất được đặt là tileTex
         LevelPart level(i * LEVEL_WIDTH, 0, mapList.at(random).path, tileTex);
 
 // Vị trí xương của level cũng được thiết lập theo vị trí xương của bản đồ được chọn.
@@ -309,7 +307,6 @@ void Game::render_update_LevelPart() {
 }
 
 void Game::render_update_bullet() {
-    // lấy danh sách đạn từ người chơi và lặp qua từng đạn trong danh sách
     vector<Bullet*> bulletList = playerList.at(0).getBulletList();
     for (int i = 0; i < playerList.at(0).getBulletList().size(); i++) {
         if (bulletList.at(i) != NULL) {
@@ -370,12 +367,6 @@ void Game::update_hight_score() {
     outFile << highscore;
     outFile.close();
 }
-
-// void render_update_heart(){
-//     for (auto& heart : heartList) {
-// 		heart->render(renderer);
-// 	}
-// }
 
 void Game::render_update_Game() {
     //start timer
