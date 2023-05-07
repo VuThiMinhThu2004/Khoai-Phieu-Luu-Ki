@@ -1,6 +1,5 @@
 #include "Bullet.h"
 
-//Tạo một đối tượng đạn mới với vị trí ban đầu p_x, p_y và hình ảnh được sử dụng để vẽ đạn là p_tex
 Bullet::Bullet(int p_x, int p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
 	collision.x = xPos;
 	collision.y = yPos;
@@ -16,7 +15,6 @@ Bullet::Bullet(int p_x, int p_y, SDL_Texture* p_tex) : Entity(p_x, p_y, p_tex) {
 
 void Bullet::update(vector<LevelPart>& LevelPartList) {
 	if (bulletFrame/delay < 5) {
-		//đạn vẫn đang trong giai đoạn di chuyển
 		xVel += BULLETSPEED;
 		
 		if (getFlipType() == SDL_FLIP_HORIZONTAL) xPos -= xVel;
@@ -30,7 +28,6 @@ void Bullet::update(vector<LevelPart>& LevelPartList) {
 		}
 		
 		if (commonFunc::touchesWood(collision, LevelPartList)) {
-			// thay đổi vị trí của đạn dựa trên hướng của lực tác động. 
 			if (getFlipType() == SDL_FLIP_HORIZONTAL) xPos += xVel;
 			else if (getFlipType() == SDL_FLIP_NONE) xPos -= xVel;
 			collision.x = getX();
@@ -44,7 +41,6 @@ void Bullet::setFlipType(SDL_RendererFlip p_PlayerflipType) {
 	flipType = p_PlayerflipType;
 }
 
-//cập nhật kích thước và vị trí của đối tượng đạn 
 void Bullet::setWidthHeight(const int& p_width, const int& p_height, const int& p_playerX) {
 	if (getFlipType() == SDL_FLIP_HORIZONTAL) {
 		xPos = p_playerX - (DEFAULTBULLET_W / 5);

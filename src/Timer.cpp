@@ -29,7 +29,7 @@ void LTimer::start() {
 }
 
 //The stop function basically reinitializes all the variables.
-void LTimer::stop() { //dừng và thiết lập lại các biến thành viên của Timer
+void LTimer::stop() { 
     //Stop the timer
     mStarted = false;
 
@@ -41,7 +41,7 @@ void LTimer::stop() { //dừng và thiết lập lại các biến thành viên 
     mPausedTicks = 0;
 }
 
-void LTimer::pause() {//tạm dùng và lưu lại thời gian đã tích lũy
+void LTimer::pause() {
     //If the timer is running and isn't already paused
     if (mStarted && !mPaused) {
         //Pause the timer
@@ -67,7 +67,7 @@ void LTimer::unpause() {
     }
 }
 
-Uint32 LTimer::getTicks() {// trả về thời gian đã tích lũy
+Uint32 LTimer::getTicks() {
     //The actual timer time
     Uint32 time = 0;
 
@@ -76,11 +76,11 @@ Uint32 LTimer::getTicks() {// trả về thời gian đã tích lũy
         //If the timer is paused
         if (mPaused) {
             //Return the number of ticks when the timer was paused
-            time = mPausedTicks;//thời gian được lưu trữ khi dừng lại
+            time = mPausedTicks;
         }
         else {
             //Return the current time minus the start time
-            time = SDL_GetTicks() - mStartTicks;//trả lại thời gian so với khi nó bắt đầu
+            time = SDL_GetTicks() - mStartTicks;
         }
     }
 

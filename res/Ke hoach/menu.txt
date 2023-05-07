@@ -1,0 +1,43 @@
+- Làm menu:
+    +) Tạo 1 class Menu riêng
+        -> Hiển thị ảnh.
+        -> Nhận chuột -> Đưa vào game/ Thoát game.
+
+- Có 3 loại nút: play, exit, retry
+- Khi người chơi chết thì sẽ hiện menu để lựa chọn. Trên menu thì chỉ hiển thị 2 nút
+
+-> Dùng 2 mảng bool để kiểm tra xem người chơi đã nhấn 1 button hay chưa, kiểm tra button có được chọn hay không để hiển thị màu sắc khác biệt.
+
+- 3 biến SDL_TEXture để lưu trữ: button, menu chính và menu retry
+
+- Hàm handleInputActive:
+	+ kiểm tra xem người dùng có nhấp vào một nút và đặt p_gameRunning thành false nếu nhấp vào nút "Exit".
+	+ Nếu người dùng nhấp vào một nút, pressed được đặt thành true, và nếu họ thả chuột, pressed được đặt thành false. 
+	+ Mảng được chọn được đặt thành true nếu người dùng di chuột qua một nút và false nếu không. Nếu phím "Escape" được nhấn, biến paused được chuyển đổi.
+
+lazyfoo lesson 17
+bool Menu::checkMouseHover(const int p_x, const int p_y) {
+	int x, y;
+	SDL_GetMouseState(&x, &y);//kiểm tra vị trí chuột
+	
+	 //Check if mouse is in button
+    bool inside = true;
+	//Mouse is left of the button
+	if ( x < p_x ) {
+		inside = false;
+	}
+	//Mouse is right of the button
+	else if ( x > p_x + BUTTON_WIDTH ) {
+		inside = false;
+	}
+	//Mouse above the button
+	else if ( y < p_y ) {
+		inside = false;
+	}
+	//Mouse below the button
+	else if ( y > p_y + BUTTON_HEIGHT ) {
+		inside = false;
+	}
+	
+	return inside;
+}

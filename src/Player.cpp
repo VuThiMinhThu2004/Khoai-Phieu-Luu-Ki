@@ -233,10 +233,7 @@ void Player::getHit(vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect&
 			cerr << maxHP << endl;
 		}
 	}
-	/*
-	nếu Player đang ở trên màn hình và chạm đáy màn hình hoặc đi quá xa về bên trái (vượt quá giới hạn của camera), 
-	Player cũng sẽ chết và phát âm thanh hitSFX.
-	*/
+
 	if (getY() + PLAYER_HEIGHT >= LEVEL_HEIGHT || getX() - camera.x <= 64) {
 		maxHP -= 10;
 	}
@@ -248,9 +245,9 @@ void Player::getHit(vector<Monster*> &monsterList, Mix_Chunk* p_sfx[], SDL_Rect&
 }
 
 void Player::knockBack() {
-	if (beingHit && beingHitFrame == 0) {//da bi tan cong
+	if (beingHit && beingHitFrame == 0) {
 		yVel -= 4;
-		if (getFlipType() == SDL_FLIP_NONE) xPos -= 10;//xem lai
+		if (getFlipType() == SDL_FLIP_NONE) xPos -= 10;
 		else if (getFlipType() == SDL_FLIP_HORIZONTAL) xPos += 10;
 	}
 }
@@ -258,11 +255,10 @@ void Player::knockBack() {
 //lazyfoo_14
 void Player::render(SDL_Rect &p_camera) {
 	if (running) {
-	//sử dụng các sprite từ mảng walkingClips để tạo hiệu ứng chạy. 
-		commonFunc::renderAnimation(tex, xPos, yPos, walkingClips[walkFrame / 4], p_camera, 0, NULL, getFlipType());//hiển thị hình ảnh của nhân vật tương ứng với trạng thái đó.
+		commonFunc::renderAnimation(tex, xPos, yPos, walkingClips[walkFrame / 4], p_camera, 0, NULL, getFlipType());
 		walkFrame++;
 
-		////Cycle animation
+		//Cycle animation
 		if (walkFrame / 4 >= WALKING_ANIMATION_FRAMES) walkFrame = 0; 
 	}
 
