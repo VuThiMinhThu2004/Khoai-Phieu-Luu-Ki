@@ -1,0 +1,27 @@
+Tham khảo lazyfoo,youtube:
+
+khởi tạo 1 nhân vật:
+	1. load animation: các trạng thái đi, đứng yên, nhảy, rơi và chết của nhân vật.(lesson14)
+	2. handleInput(lesson 26):
+		-nếu nhân vật còn sống: cho di chuyển bằng 3 phím 'a','d','w' và dùng chuột phải để bắn ra đạn.
+		-khi click chuột trái: 
+			+sẽ tạo 1 đối tượng đạn có tọa độ ở bên phải nhân vật. chèn âm thanh bắn súng.
+			+đặt (hướng đạn = hướng player, kích thước vị trí đạn = hàm setWidthHeight, cho phép đạn di chuyển (hàm move), 
+			 đặt loaikj đạn, thêm đạn vào danh sách đạn).
+	3. sử dụng một biến gravity để cho nhân vật rơi chân thực hơn.
+kiểm tra xem:
+	- nv có bị quái tấn công - hàm getHit -> máu giảm
+	- nv chạm đáy màn hình (rơi xuống vực) -> chết
+	- nv đi về bên trái màn hình -> giảm máu (vì bên đây sẽ có 1 dàn cây ăn thịt)
+
+Hàm update:
+	-kiểm tra các trạng thái của nhân vật.
+	-Di chuyển nhân vật theo trục x,y
+	-Kiểm tra va chạm với các thanh gỗ(wood) hay không	
+copy Lazyfoo lesson30: handleCamera - có tác dụng là:
+	-giới hạn di chuyển camera: Camera sẽ không di chuyển quá giới hạn màn hình chơi.
+	-nếu người chơi đến gần phía bên phải màn hình (từ đầu màn hình tới 2/3 chiều rộng của màn hình),
+	 camera sẽ dừng di chuyển trên trục x và chỉ di chuyển theo trục y để giữ cho người chơi luôn nằm giữa màn hình
+	-Giới hạn: camera di chuyển quá xa về bên trái, bên trên, hoặc bên dưới màn hình, 
+	 camera sẽ bị giới hạn lại để tránh hiển thị ra khỏi vùng chơi của game.
+

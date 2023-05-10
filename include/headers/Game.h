@@ -26,6 +26,8 @@ private:
 	SDL_Texture* buttonTex = NULL;
 	SDL_Texture* circleOfLightTex = NULL;
 	SDL_Texture* heartTex = NULL;
+	SDL_Texture* dieTex = NULL;
+	SDL_Texture* namegameTex = NULL;
 
 	//The music that will be played: lesson 21
 	Mix_Music* backgroundMusic = NULL;
@@ -112,6 +114,7 @@ public:
 		SDL_DestroyTexture(backgroundTex);
 		SDL_DestroyTexture(buttonTex);
 		SDL_DestroyTexture(circleOfLightTex);
-		SDL_DestroyTexture(heartTex);
+		SDL_DestroyTexture(dieTex);
+		SDL_DestroyTexture(namegameTex);		
 	}
 };

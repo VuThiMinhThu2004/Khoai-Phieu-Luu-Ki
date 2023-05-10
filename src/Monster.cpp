@@ -130,10 +130,10 @@ void Monster::moveToPlayer(Player& p_player, vector<LevelPart>& LevelPartList) {
 		//trong tầm nhìn của Monster
 		if ((p_player.getY() >= getY() - TILE_WIDTH && p_player.getY() <= getY() + TILE_WIDTH * 0.5) && distanceToPlayer <= TILE_WIDTH * 7) {
 			if (p_player.getX() < getX()) {
-				if (LevelPartList.at(levelSTT).getTilesList().at(groundSTT - 1)->getType() > 84) //Tile bên trái tile monster đang đứng trên > 84 thì monster không di chuyển
+				if (LevelPartList.at(levelSTT).getTilesList().at(groundSTT - 1)->getType() > 84) 
 					xVel = 0;
 				else 
-					xVel = -MONSTER_VEL;//tile đang đứng là các thanh gỗ nên di chuyển được trên các tile đó
+					xVel = -MONSTER_VEL;
 			}
 			else if (LevelPartList.at(levelSTT).getTilesList().at(groundSTT + 1)->getType() > 84) 
 				xVel = 0;

@@ -1,4 +1,0 @@
-- nhân vật di chuyển bằng các phím: a,d,w
-- khi người chơi nhấn chuột trái => đạn xuất hiện 
-- con quái khi bị bắn thì chỉ số mạng giảm dần -> 0 thì chết
-- phía bên trái màn hình là hàng cây ăn thịt (lấy ý tưởng từ game zombie): khi người chơi chạy không kịp thì sẽ bị trừ 10 máu.

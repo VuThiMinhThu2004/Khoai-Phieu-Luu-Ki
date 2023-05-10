@@ -1,0 +1,21 @@
+Lazyfoo lesson 16:
+- Khai báo thư viện <SDL_ttf.h>
+	-> Cách SDL_TTF hoạt động là bạn tạo một hình ảnh mới từ phông chữ và màu sắc cho trước.
+
+-Sẽ tải hình ảnh của mình từ văn bản được hiển thị bởi SDL_TTF thay vì một tệp:
+	TTF_Font* -> Sinh ra 1 texture (khá tương tự như image ~ thay cho loadFile)
+
+- Khởi tạo SDL_ttf: TTF_Init()
+	-> Check lỗi thông qua TTF_GetError()
+
+-Tải phông chữ bằng TTF_OPENFONT. Điều này đi vào đường dẫn đến tệp phông chữ và kích thước điểm chúng tôi muốn hiển thị:
+	-> TTF_Font* = TTF_OpenFont(tên địa chỉ, kích thước muốn vẽ)
+
+-Sử dụng SDL_Surface được tạo bởi SDL_TTF thay vì tệp.
+-Load Font thì cũng thông qua SDL_Surface, nhưng mà bằng hàm: TTF_RenderText_Solid(TTF_Font*, chữ cần hiển thị, textcolor ~ màu sắc hiển thị)
+
+-Truyền qua kiểu dữ liệu Texture thông qua hàm: SDL_CreateTextureFromSurface(SDL_Renderer*, SDL_Surface*). Kích thước ảnh truyền vào từ surface pixels sẽ được lấy qua: Surface -> w và Surface -> h
+
+-Muốn giảm thiểu số thời gian hiển thị văn bản. Chỉ tìm lại nó khi cần => sử dụng cùng một bề mặt văn bản cho toàn bộ chương trình này, em chỉ muốn kết xuất một lần.
+
+-Giải phóng phông chữ bằng TTF_CLOSEFONT. Thoát khỏi thư viện SDL_TTF với TTF_QUIT để hoàn thành việc dọn dẹp.

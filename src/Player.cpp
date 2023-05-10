@@ -129,10 +129,11 @@ void Player::update(vector<LevelPart>& LevelPartList, vector<Monster*> &monsterL
 		if (xVel > 0) flipType = SDL_FLIP_NONE;
 	}
 
-	//lesson 26: di chuyển nhân vật theo trục x và y nếu nhân vật chưa chết.
+	//lesson 26
+	
 	//move x
 	if (!dead) {
-		xPos += xVel;//xem lai
+		xPos += xVel;
 		collision.x = getX() + PLAYER_WIDTH;
 
 

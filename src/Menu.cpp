@@ -112,9 +112,9 @@ void Menu::renderRetryMenu() {
 	}
 }
 
-bool Menu::checkMouseHover(const int p_x, const int p_y) {//ls17
+bool Menu::checkMouseHover(const int p_x, const int p_y) {//lesson 17
 	int x, y;
-	SDL_GetMouseState(&x, &y);//kiểm tra vị trí chuột
+	SDL_GetMouseState(&x, &y);
 	
 	 //Check if mouse is in button
     bool inside = true;

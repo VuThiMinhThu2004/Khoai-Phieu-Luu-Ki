@@ -1,0 +1,10 @@
+tương tư như player đầu tiên là load các trạng thái của quái, di chuyển theo trục x,y
+
+ý tưởng: quái vật sẽ tự di chuyển đến gần player khi khoảng cách của chúng <= X(ẩn số) rồi sẽ tấn công khi khoảng cách rất nhỏ là...
+	- vùng dịch chuyển: có kiểm tra xem các ô tilemap nào mà quái vật có thể di chuyển trên đó được (như là nhân vật)
+
+-xử lí khi quái bị bắn: kiểm tra va chạm của các viên đạn trong danh sách -> giảm số lượng mạng của quái
+	+ để chân thực hơn thì ta sẽ không cho đạn đi qua người của quái vật => setmove(false): không cho phép đạn di chuyển;
+	 Và có thêm phần giật lùi cho quái khi bị bắn.
+
+- kiểm tra xem quái có vị trí quá màn hình về bên trái -> coi như đã chết do bị ăn thịt -> xóa khỏi trò chơi

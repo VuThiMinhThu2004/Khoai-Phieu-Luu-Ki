@@ -1,0 +1,15 @@
+Việc tạo level vô tận có thể thực hiện bằng cách sử dụng các kỹ thuật như tạo map động, tải các tệp tin map từng phần hoặc sử dụng các thuật toán sinh ngẫu nhiên.
+
+-> Em chọn kỹ thuật tạo map động:
+
+-Tạo một bản đồ mặc định ban đầu, khi người chơi di chuyển đến bên phải của bản đồ, chúng ta sẽ tạo một bản đồ mới và giải phóng bản đồ cũ.
+
+-Để làm được điều này, chúng ta sử dụng một vector chứa các bản đồ, mỗi bản đồ được lưu trữ dưới dạng một vector các tiles.
+
+-Đầu tiên, ta cần định nghĩa một số hằng số để mô tả kích thước của các tiles và của bản đồ, cũng như số lượng tiles mà một bản đồ cần có. Sau đó, ta sẽ tạo ra một bản đồ mặc định đầu tiên bằng cách sử dụng hàm initMap()
+
+-Mỗi lần người chơi di chuyển đến bên phải của bản đồ hiện tại, chúng ta sẽ tạo một bản đồ mới và giải phóng bản đồ cũ. Chúng ta cũng sẽ kiểm tra xem người chơi có vượt quá giới hạn bản đồ chưa.
+
+
+- duyệt cả vị trí của monster trên map của level đó
+- vị trí của từng con quái được tính bằng cách lấy vị trí x và y của con quái, nhân với kích thước của một ô vuông trên bản đồ (TILE_WIDTH), rồi cộng với vị trí x và y của đối tượng LevelPart mà con quái đó đang nằm trong. Điều này sẽ tạo ra tọa độ tuyệt đối của quái vật trên toàn bản đồ. truyeen vao lan luot la cac cap {x,y} cua con quai

@@ -39,7 +39,7 @@ public:
 	bool isMoving() const { return moving; }
 	SDL_Rect getCollision() { return collision; }
 
-	//setter: thay đổi các thuộc tính của đạn: loại, tình trạng di chuyeernm phần va chạm
+	//setter
 	void setFlipType(SDL_RendererFlip p_PlayerflipType);
 	void setType(const int& p_type) { bulletType = p_type; }
 	void setMove(bool p_move) { moving = p_move; }

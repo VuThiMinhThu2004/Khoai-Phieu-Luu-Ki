@@ -39,7 +39,7 @@ bool Game::loadMedia() {//lazyfoo
     bool success = true;
 
 
-    if (!commonFunc::loadFont("res/Pixel-UniCode.ttf")) success = false;
+    if (!commonFunc::loadFont("res/fonts/segoeprb.ttf")) success = false;
 
     //Load sprite sheet texture
     potatoTex = commonFunc::loadTexture("res/images/Potato.png");
@@ -66,6 +66,11 @@ bool Game::loadMedia() {//lazyfoo
     circleOfLightTex = commonFunc::loadTexture("res/images/Circle of light.png");
     if (circleOfLightTex == NULL) success = false;
 
+    dieTex = commonFunc::loadTexture("res/images/die.png");
+    if (dieTex == NULL) success = false;
+
+    namegameTex = commonFunc::loadTexture("res/images/name.png");
+    if (namegameTex == NULL) success = false;
 
     backgroundMusic = Mix_LoadMUS("res/sfx/bg.mp3");
     if (backgroundMusic == NULL) {
@@ -79,25 +84,25 @@ bool Game::loadMedia() {//lazyfoo
         success = false;
     }
 
-    playerSFX[0] = Mix_LoadWAV("res/sfx/playeHit.wav"); // hit
+    playerSFX[0] = Mix_LoadWAV("res/sfx/playeHit.wav"); 
     if (playerSFX[0] == NULL) {
         printf( "Failed to load player sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
         success = false;
     }
 
-    playerSFX[1] = Mix_LoadWAV("res/sfx/playerJump.wav"); //jumping
+    playerSFX[1] = Mix_LoadWAV("res/sfx/playerJump.wav");
     if (playerSFX[1] == NULL) {
         printf( "Failed to load player sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
         success = false;
     }
 
-    playerSFX[2] = Mix_LoadWAV("res/sfx/playerLanding.wav"); //landing
+    playerSFX[2] = Mix_LoadWAV("res/sfx/playerLanding.wav"); 
     if (playerSFX[2] == NULL) {
         printf( "Failed to load player sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
         success = false;
     }
 
-    playerSFX[3] = Mix_LoadWAV("res/sfx/playerLaser.wav"); //shooting
+    playerSFX[3] = Mix_LoadWAV("res/sfx/playerLaser.wav");
     if (playerSFX[3] == NULL) {
         printf( "Failed to load player sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
         success = false;
@@ -174,13 +179,13 @@ void Game::renderScore() {
 }
 
 bool Game::createMap() {
-    path_pos Map1({ 2,8,6,6,9,6 }, "res/map/map1.map");
+    path_pos Map1({ 6,6,9,6 }, "res/map/map1.map");
     mapList.push_back(Map1);
-    path_pos Map2({ 6,6,10,3,15,5 }, "res/map/map2.map");
+    path_pos Map2({5,5,10,3,15,5 }, "res/map/map2.map");
     mapList.push_back(Map2);
-    path_pos Map3({ 1,9,16,6,19,7 }, "res/map/map3.map");
+    path_pos Map3({ 5,5,15,6,19,7 }, "res/map/map3.map");
     mapList.push_back(Map3);
-    path_pos Map4({ 5,6,9,9 }, "res/map/map4.map");
+    path_pos Map4({ 6,6,7,9,15,4}, "res/map/map4.map");
     mapList.push_back(Map4);
     path_pos MapSpawn({ }, "res/map/map_spawn.map");
     mapList.push_back(MapSpawn);
@@ -234,6 +239,10 @@ bool Game::createPlayer() {
 bool Game::createMenu() {
     Menu gameMenu(buttonTex, backgroundTex, backgroundTex);
     menuList.push_back(gameMenu);
+
+    Mix_FadeInMusic(backgroundMusic, -1, 1000);
+    Mix_VolumeMusic(600);
+
     if (menuList.size() < 0) return false;
     return true;
 }
@@ -247,7 +256,7 @@ void Game::playMusic() {
     Mix_VolumeChunk(bredatorySFX, 80);
     if (Mix_PlayingMusic() == 0) {
         Mix_FadeInMusic(backgroundMusic, -1, 1000);
-        Mix_VolumeMusic(50);
+        Mix_VolumeMusic(600);
     }
     else if (Mix_PausedMusic() == 1) Mix_ResumeMusic();
     else if (playerList.at(0).isDead()) Mix_HaltMusic();
@@ -358,6 +367,8 @@ void Game::render_update_Game() {
     renderScore();
     
     if (playerList.at(0).isDead()) {
+        commonFunc::renderTexture(dieTex, SCREEN_WIDTH/2 - 540/2, SCREEN_HEIGHT/6, 540, 143);
+
         menuList.at(0).renderRetryMenu();
         if (score > highscore) highscore = score;
         update_hight_score();
@@ -371,6 +382,9 @@ void Game::render_update_Game() {
 void Game::render_mainMenu() {
     commonFunc::clearRenderer();
     getMenuList().at(0).renderMainMenu();
+
+    commonFunc::renderTexture(namegameTex, SCREEN_WIDTH/2 - 982/2, SCREEN_HEIGHT/6, 982, 133);
+
     commonFunc::renderPresent();
 }
 

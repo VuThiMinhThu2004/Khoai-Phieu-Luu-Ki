@@ -1,5 +1,6 @@
 #include "LevelPart.h"
 
+//lesson31
 LevelPart::LevelPart(int p_x, int p_y, const char* p_path, SDL_Texture* p_tileTex)
     :x(p_x), y(p_y)
 {
@@ -38,14 +39,13 @@ LevelPart::LevelPart(int p_x, int p_y, const char* p_path, SDL_Texture* p_tileTe
                 tilesLoaded = false;
                 break;
             }
-            //Dịch x của tile tiếp theo: o tiep theo dc dat ben canh o truoc
+            //Dịch x của tile tiếp theo
             x += TILE_WIDTH;
 
-            //Nếu như đến cuoi cap
-            if (x >= getX() + LEVEL_WIDTH) {
-                //Xuống dòng mới và làm lại
+            //Cuối level
+            if (x >= getX() + LEVEL_WIDTH) {                
                 x = getX();
-                y += TILE_HEIGHT;
+                y += TILE_HEIGHT;////Xuống dòng mới và làm lại
             }
         }
     }
@@ -76,7 +76,6 @@ void LevelPart::setLevelX(int p_x) {
     }
 }
 
-//tạo các Tile object từ dữ liệu được lưu trữ trong một file và đặt chúng vào vị trí thích hợp trong màn chơi.
 void LevelPart::setTilesType(const char* p_path) {
     bool tilesLoaded = true;
     int x = getX(), y = getY();
@@ -101,7 +100,6 @@ void LevelPart::setTilesType(const char* p_path) {
                 break;
             }
 
-            //Nếu như đọc đc tileType và thỏa mãn
             if ((tileType >= 0) && (tileType < TOTAL_TILE_SPRITES)) {
                 tilesList.at(i)->setType(tileType);
             }
@@ -113,9 +111,8 @@ void LevelPart::setTilesType(const char* p_path) {
             //Dịch x của tile tiếp theo
             x += TILE_WIDTH;
 
-            //Nếu như đến giới hạn level
+            //Đến giới hạn level
             if (x >= getX() + LEVEL_WIDTH) {
-                //Xuống dòng mới và làm lại
                 x = getX();
                 y += TILE_HEIGHT;
             }

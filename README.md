@@ -31,7 +31,7 @@
 ## II, Mô tả chung về trò chơi
   **Thể loại:** `Sinh tồn`, `phiêu lưu`
   
-  [Video minh hoạ](https://youtu.be/5wZWLHtU8rk)
+  [Video minh hoạ](https://youtu.be/CgsUxivZXas)
   Game sinh tồn, phiêu lưu trong thế giới 2D có thể di chuyển đánh quái.
 
   Người chơi hoá thân vào nhân vật trong game, di chuyển trên bản đồ và tấn công quái vật để kiếm số điểm cao nhất
@@ -78,7 +78,8 @@
  <a name = "tham-khao"/>
     
  ### VII, Tham khảo
-  - [Hướng dẫn](https://lazyfoo.net/tutorials/SDL/)
+  - [Hướng dẫn - LAZYFOO](https://lazyfoo.net/tutorials/SDL/)
+  - [Hướng dẫn - SDL_BOOK](https://www.myzony.com/usr/uploads/2016/02/4127789886.pdf)
   - [Hướng dẫn](https://youtube.com/playlist?list=PL2RPjWnJduNmXHRYwdtublIPdlqocBoLS)
   - [Hướng dẫn](https://youtube.com/playlist?list=PLUFd3gYWwiYFdSoqZp35RU6mja4N5u4dz)
   - [Hướng dẫn](https://youtube.com/playlist?list=PLHJE4y54mpC5_eEz9gCqIkNpU-n_2eyNt)

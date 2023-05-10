@@ -94,12 +94,11 @@ bool commonFunc::loadFont(const char* filePath) {
 }
 
 //coppy lesson16
-//Create text:tạo ra một texture chứa nội dung văn bản được truyền vào dưới dạng chuỗi (p_text) và màu sắc của văn bản (p_textColor).
 SDL_Texture* commonFunc::createText(string textureText, SDL_Color textColor) {
     //Render text surface
 	SDL_Surface* textSurface = TTF_RenderText_Solid(font, textureText.c_str(), textColor);//tạo ra một bề mặt (surface) văn bản dựa trên font đã được load trước đó
 	SDL_Texture* mtexture = NULL;
-	if (textSurface == NULL) {//không tạo thành công
+	if (textSurface == NULL) {
 		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
 	}
 	else {
@@ -121,13 +120,13 @@ void commonFunc::Color() {
 
 	//SDL_MapRGB() được sử dụng để chuyển đổi giá trị RGB sang giá trị pixel tương ứng với định dạng màu của surface.
 	SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 255, 0, 0));
-	SDL_UpdateWindowSurface(window);//cập nhật cửa sổ hiển thị
+	SDL_UpdateWindowSurface(window);
 }
 
 
 
 void commonFunc::clearRenderer() {
-	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);//trang
+	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);//white
 	SDL_RenderClear(renderer);
 }
 
@@ -150,7 +149,7 @@ void commonFunc::cleanUp() {
 	SDL_Quit();
 }
 
-//lazyfoo
+//lazyfoo 27
 bool commonFunc::checkCollision(SDL_Rect a, SDL_Rect b) {
 	//tọa độ các cạnh của hình chữ nhật a và b.
 	int leftA, leftB;
@@ -168,7 +167,7 @@ bool commonFunc::checkCollision(SDL_Rect a, SDL_Rect b) {
 	topB = b.y;
 	bottomB = b.y + b.h;
 
-	//hai hình chữ nhật không giao nhau theo chiều dọc.
+	//chiều dọc.
 	if (bottomA <= topB) {
 		return false;
 	}
@@ -177,7 +176,7 @@ bool commonFunc::checkCollision(SDL_Rect a, SDL_Rect b) {
 		return false;
 	}
 
-	//hai hình chữ nhật không giao nhau theo chiều ngang.
+	//chiều ngang.
 	if (rightA <= leftB) {
 		return false;
 	}
@@ -224,7 +223,6 @@ bool commonFunc::touchesWood(SDL_Rect& box, vector<LevelPart>& LevelPartList) {
 
 bool commonFunc::touchesWood(SDL_Rect& box, vector<LevelPart>& LevelPartList, bool& grounded, int& groundSTT, int& levelSTT) {
 
-//kiểm tra va chạm của hộp với bản đồ và xác định xem hộp có nằm trên mặt đất hay không.
 	bool check = false;
 	for (int i = 0; i < LevelPartList.size(); i++) {
 		if (box.x + box.w + 12 >= LevelPartList.at(i).getX() && box.x <= LevelPartList.at(i).getX() + LEVEL_WIDTH && box.y >= 0 && box.y < LEVEL_HEIGHT - TILE_HEIGHT) {

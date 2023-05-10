@@ -1,0 +1,13 @@
+Tham khảo game bắn gà.
+
+Khởi tạo 1 đối tượng đạn cơ bản:
+1. Load animation cho đạn với vị trí ban đầu p_x, p_y(phụ thuộc vào nhân vật)
+2. Xác định vị trí mới của đạn dựa vào hướng đạn(phụ thuộc hướng nhân vật)
+   Xử lý va chạm giữa viên đạn và thanh gỗ (wood).Nếu có va chạm, tiến hành xử lý như sau:
+	-Thay đổi vị trí của viên đạn dựa trên hướng của lực tác động ngược lại (nếu đạn đang di chuyển sang trái thì sẽ di chuyển sang phải, ngược lại nếu đạn đang di chuyển sang phải thì sẽ di chuyển sang trái).
+	-Cập nhật lại vùng va chạm của viên đạn.
+
+3.Kết thúc quá trình di chuyển của viên đạn:
+	-setMove(false) để đánh dấu rằng viên đạn không còn di chuyển nữa
+
+Tạo 1 BulletList:
